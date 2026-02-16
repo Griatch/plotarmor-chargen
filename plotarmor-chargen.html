@@ -2822,11 +2822,30 @@
             };
         }
 
-        function printCharacter() {
+        // Temporarily hide the header/controls and add export-mode so that
+        // the character sheet's bounding rect is consistent across screen
+        // sizes (html2canvas uses the real element's position for cropping).
+        function prepareForExport() {
             if (document.activeElement && (document.activeElement.classList.contains('inline-edit-input') || document.activeElement.classList.contains('inline-edit-textarea'))) document.activeElement.blur();
-            const element = document.getElementById('characterSheet');
+            var header = document.querySelector('.header');
+            var controls = document.querySelector('.controls');
+            var element = document.getElementById('characterSheet');
+            header.style.display = 'none';
+            controls.style.display = 'none';
             element.classList.add('export-mode');
-            const opt = {
+            return { header: header, controls: controls, element: element };
+        }
+
+        function cleanupAfterExport(refs) {
+            refs.header.style.display = '';
+            refs.controls.style.display = '';
+            refs.element.classList.remove('export-mode');
+        }
+
+        function printCharacter() {
+            var refs = prepareForExport();
+            var element = refs.element;
+            var opt = {
                 margin: 0.5,
                 filename: 'character-sheet.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
@@ -2836,11 +2855,11 @@
 
             // Generate PDF as blob and open in new window for printing
             html2pdf().set(opt).from(element).toCanvas()
-                .then(function() { element.classList.remove('export-mode'); })
+                .then(function() { cleanupAfterExport(refs); })
                 .toPdf().outputPdf('blob')
                 .then(function(blob) {
-                    const url = URL.createObjectURL(blob);
-                    const printWindow = window.open(url, '_blank');
+                    var url = URL.createObjectURL(blob);
+                    var printWindow = window.open(url, '_blank');
                     if (printWindow) {
                         printWindow.onload = function() {
                             printWindow.print();
@@ -2851,15 +2870,14 @@
 
         // Export character sheet to PDF
         function exportToPDF() {
-            if (document.activeElement && (document.activeElement.classList.contains('inline-edit-input') || document.activeElement.classList.contains('inline-edit-textarea'))) document.activeElement.blur();
-            const element = document.getElementById('characterSheet');
-            element.classList.add('export-mode');
-            const nameEl = element.querySelector('.character-name .field-text');
-            const nameParts = nameEl ? nameEl.textContent.trim().split(/\s+/) : [];
-            const filename = nameParts.length >= 2
+            var refs = prepareForExport();
+            var element = refs.element;
+            var nameEl = element.querySelector('.character-name .field-text');
+            var nameParts = nameEl ? nameEl.textContent.trim().split(/\s+/) : [];
+            var filename = nameParts.length >= 2
                 ? nameParts[0] + '_' + nameParts[1] + '_plotarmor.pdf'
                 : 'character-sheet.pdf';
-            const opt = {
+            var opt = {
                 margin: 0.5,
                 filename: filename,
                 image: { type: 'jpeg', quality: 0.98 },
@@ -2868,7 +2886,7 @@
             };
 
             html2pdf().set(opt).from(element).toCanvas()
-                .then(function() { element.classList.remove('export-mode'); })
+                .then(function() { cleanupAfterExport(refs); })
                 .toPdf().save();
         }
 
