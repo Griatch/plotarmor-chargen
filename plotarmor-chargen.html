@@ -365,9 +365,16 @@
         }
 
         .export-mode .character-header {
+            flex-direction: row;
             border-bottom: 2px solid #000;
             padding: 0 0 10px 0;
             margin-bottom: 12px;
+        }
+
+        .export-mode .character-meta {
+            text-align: right;
+            min-width: 150px;
+            margin-top: 0;
         }
 
         .export-mode .character-name {
@@ -548,7 +555,7 @@
            RESPONSIVE STYLES
            ========================================================== */
 
-        @media (max-width: 600px) {
+        @media screen and (max-width: 600px) {
             body {
                 padding: 8px;
             }
