@@ -8,6 +8,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
+        :root {
+            /* Set to 0-1 to make the character sheet background transparent.
+               Only affects backgrounds; text and buttons remain fully opaque. */
+            --sheet-bg-opacity: 1;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -24,12 +30,12 @@
         .container {
             max-width: 850px;
             margin: 0 auto;
-            background: white;
+            background: rgb(255 255 255 / var(--sheet-bg-opacity));
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
 
         .header {
-            background: white;
+            background: rgb(255 255 255 / var(--sheet-bg-opacity));
             color: #333;
             padding: 30px;
             text-align: center;
@@ -51,7 +57,7 @@
 
         .controls {
             padding: 30px;
-            background: #f5f5f5;
+            background: rgb(245 245 245 / var(--sheet-bg-opacity));
             border-bottom: 2px solid #333;
         }
 
@@ -137,7 +143,7 @@
         .character-sheet {
             padding: 40px;
             position: relative;
-            background: white;
+            background: rgb(255 255 255 / var(--sheet-bg-opacity));
         }
 
         .character-sheet::before {
