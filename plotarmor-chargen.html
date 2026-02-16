@@ -544,6 +544,71 @@
             display: none !important;
         }
 
+        /* ==========================================================
+           RESPONSIVE STYLES
+           ========================================================== */
+
+        @media (max-width: 600px) {
+            body {
+                padding: 8px;
+            }
+
+            .header {
+                padding: 18px 15px;
+            }
+
+            .header h1 {
+                font-size: 1.4em;
+                letter-spacing: 1px;
+            }
+
+            .controls {
+                padding: 18px 15px;
+            }
+
+            .control-group {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .control-item {
+                min-width: 100%;
+            }
+
+            .generate-btn,
+            .export-btn {
+                width: 100%;
+                margin: 6px 0;
+            }
+
+            .edit-hint {
+                display: block;
+                margin: 10px 0 0 0;
+            }
+
+            .character-sheet {
+                padding: 24px 16px;
+            }
+
+            .character-header {
+                flex-direction: column;
+            }
+
+            .character-meta {
+                text-align: left;
+                min-width: unset;
+                margin-top: 12px;
+            }
+
+            .character-name {
+                font-size: 1.25em;
+            }
+
+            .watermark {
+                font-size: 1.2em;
+            }
+        }
+
         /* Browser print (Ctrl+P) — page setup and hide UI controls.
            Visual overrides come from .export-mode, applied via JS. */
         @media print {
