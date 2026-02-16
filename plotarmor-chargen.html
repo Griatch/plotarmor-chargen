@@ -2830,16 +2830,23 @@
             var header = document.querySelector('.header');
             var controls = document.querySelector('.controls');
             var element = document.getElementById('characterSheet');
+            var savedScrollY = window.scrollY;
+            var savedBodyPadding = document.body.style.padding;
             header.style.display = 'none';
             controls.style.display = 'none';
+            document.body.style.padding = '0';
             element.classList.add('export-mode');
-            return { header: header, controls: controls, element: element };
+            window.scrollTo(0, 0);
+            return { header: header, controls: controls, element: element,
+                     savedScrollY: savedScrollY, savedBodyPadding: savedBodyPadding };
         }
 
         function cleanupAfterExport(refs) {
             refs.header.style.display = '';
             refs.controls.style.display = '';
+            document.body.style.padding = refs.savedBodyPadding;
             refs.element.classList.remove('export-mode');
+            window.scrollTo(0, refs.savedScrollY);
         }
 
         function printCharacter() {
