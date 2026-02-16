@@ -1,9 +1,12 @@
-# A simple Plot Armor character generation system
+![Screenshot of the character generator](screenshot.jpg)
 
-This repository has a simple auto-character generation system for
-the [Plot Armor][plotarmor] roleplaying game!
+This repository contains a full character generation system for
+the [Plot Armor][plotarmor] roleplaying game. It's distributed as a single
+HTML page, making it easy to embed.
 
-![Screenshot of the character generator](screenshot.jpg))
+> If you have good ideas on random backgrounds/blurbs strings to add, make an issue, 
+and I'll review and add them!
+
 
 ## Functionality
 
@@ -21,6 +24,5 @@ inspiration!), as well as print and export to PDF!
 
 This is built as a single-file JavaScript application,
 embedded in an HTML file, for easily sharing and embedding in other pages.
-
 
 [plotarmor]: https://griatch.itch.io/plot-armor-rpg
