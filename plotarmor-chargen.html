@@ -2807,22 +2807,41 @@
             document.getElementById('characterSheet').innerHTML = sheetHTML;
         }
 
+        // Force a fixed desktop-like width during PDF capture so
+        // html2canvas always renders a consistent layout regardless
+        // of the current screen size.
+        const EXPORT_WIDTH = 810; // px — matches max-width minus padding
+
+        function prepareForExport(element) {
+            if (document.activeElement && (document.activeElement.classList.contains('inline-edit-input') || document.activeElement.classList.contains('inline-edit-textarea'))) document.activeElement.blur();
+            element.classList.add('export-mode');
+            element.style.width = EXPORT_WIDTH + 'px';
+            element.style.minWidth = EXPORT_WIDTH + 'px';
+            element.style.maxWidth = EXPORT_WIDTH + 'px';
+        }
+
+        function cleanupAfterExport(element) {
+            element.classList.remove('export-mode');
+            element.style.width = '';
+            element.style.minWidth = '';
+            element.style.maxWidth = '';
+        }
+
         // Print character sheet
         function printCharacter() {
-            if (document.activeElement && (document.activeElement.classList.contains('inline-edit-input') || document.activeElement.classList.contains('inline-edit-textarea'))) document.activeElement.blur();
             const element = document.getElementById('characterSheet');
-            element.classList.add('export-mode');
+            prepareForExport(element);
             const opt = {
                 margin: 0.5,
                 filename: 'character-sheet.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
+                html2canvas: { scale: 2, width: EXPORT_WIDTH },
                 jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
             };
 
             // Generate PDF as blob and open in new window for printing
             html2pdf().set(opt).from(element).toCanvas()
-                .then(function() { element.classList.remove('export-mode'); })
+                .then(function() { cleanupAfterExport(element); })
                 .toPdf().outputPdf('blob')
                 .then(function(blob) {
                     const url = URL.createObjectURL(blob);
@@ -2837,9 +2856,8 @@
 
         // Export character sheet to PDF
         function exportToPDF() {
-            if (document.activeElement && (document.activeElement.classList.contains('inline-edit-input') || document.activeElement.classList.contains('inline-edit-textarea'))) document.activeElement.blur();
             const element = document.getElementById('characterSheet');
-            element.classList.add('export-mode');
+            prepareForExport(element);
             const nameEl = element.querySelector('.character-name .field-text');
             const nameParts = nameEl ? nameEl.textContent.trim().split(/\s+/) : [];
             const filename = nameParts.length >= 2
@@ -2849,12 +2867,12 @@
                 margin: 0.5,
                 filename: filename,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
+                html2canvas: { scale: 2, width: EXPORT_WIDTH },
                 jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
             };
 
             html2pdf().set(opt).from(element).toCanvas()
-                .then(function() { element.classList.remove('export-mode'); })
+                .then(function() { cleanupAfterExport(element); })
                 .toPdf().save();
         }
 
