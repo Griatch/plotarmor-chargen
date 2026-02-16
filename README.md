@@ -3,6 +3,8 @@
 This repository has a simple auto-character generation system for
 the [Plot Armor][plotarmor] roleplaying game!
 
+![Screenshot of the character generator](screenshot.jpg))
+
 ## Functionality
 
 The user is able to select the Genre (Modern, Fantasy, Sci-fi, or Horror)
