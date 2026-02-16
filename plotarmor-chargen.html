@@ -1,0 +1,2806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plot Armor Character Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Alegreya', serif;
+            background: #e8e8e8;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            background: white;
+            color: #333;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 2px solid #333;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #333;
+        }
+
+        .header p {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .controls {
+            padding: 30px;
+            background: #f5f5f5;
+            border-bottom: 2px solid #333;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .control-item {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .control-item label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+            font-family: 'Alegreya', serif;
+        }
+
+        .control-item select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #333;
+            font-size: 1em;
+            background: white;
+            cursor: pointer;
+            font-family: 'Alegreya', serif;
+        }
+
+        .control-item select:hover {
+            background: #f5f5f5;
+        }
+
+        .control-item select:focus {
+            outline: 2px solid #333;
+            background: #f5f5f5;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .generate-btn {
+            background: #333;
+            color: white;
+            border: 2px solid #333;
+            padding: 12px 30px;
+            font-size: 1em;
+            cursor: pointer;
+            font-family: 'Alegreya', serif;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .generate-btn:hover {
+            background: #555;
+            border-color: #555;
+        }
+
+        .generate-btn:active {
+            background: #222;
+        }
+
+        .character-sheet {
+            padding: 40px;
+            position: relative;
+            background: white;
+        }
+
+        .character-sheet::before {
+            content: '○';
+            position: absolute;
+            font-size: 20px;
+            color: #333;
+            top: 20px;
+            left: 20px;
+        }
+
+        .character-sheet::after {
+            content: '○';
+            position: absolute;
+            font-size: 20px;
+            color: #333;
+            top: 20px;
+            right: 20px;
+        }
+
+        .watermark::before {
+            content: '○';
+            position: absolute;
+            font-size: 20px;
+            color: #333;
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .watermark::after {
+            content: '○';
+            position: absolute;
+            font-size: 20px;
+            color: #333;
+            bottom: 20px;
+            right: 20px;
+        }
+
+        .sheet-section {
+            margin-bottom: 0;
+            padding: 15px 0 14px 0;
+            border-bottom: 1px solid #999;
+        }
+
+        .sheet-section:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .sheet-section h2 {
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .format-hint {
+            font-size: 0.75em;
+            color: #666;
+            font-style: italic;
+            font-weight: normal;
+            text-transform: none;
+            letter-spacing: normal;
+            margin-left: 10px;
+        }
+
+        .character-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 0 0 15px 0;
+            border-bottom: 2px solid #333;
+            margin-bottom: 20px;
+        }
+
+        .character-name-concept {
+            flex: 1;
+        }
+
+        .character-name {
+            font-size: 1.5em;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .character-blurb {
+            font-size: 1em;
+            color: #333;
+            font-style: italic;
+        }
+
+        .character-meta {
+            text-align: right;
+            min-width: 150px;
+        }
+
+        .player-field {
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        .luck-counter {
+            display: inline-block;
+            background: transparent;
+            color: #333;
+            padding: 8px 15px;
+            border: 2px solid #333;
+            font-size: 1em;
+            font-weight: bold;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .luck-value {
+            display: inline-block;
+            min-width: 30px;
+            border-bottom: 1px solid #333;
+            min-height: 1.2em;
+        }
+
+        .details-text {
+            line-height: 1.7;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .character-details-section {
+            padding-bottom: 20px;
+        }
+
+        .approaches-list {
+            list-style: none;
+        }
+
+        .approaches-list li {
+            padding: 8px 0;
+            margin-bottom: 6px;
+            color: #333;
+        }
+
+        .approaches-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .empty-slots {
+            color: #666;
+            font-style: italic;
+            padding: 8px 0;
+            font-size: 0.9em;
+        }
+
+        .slot-list {
+            margin: 0;
+            padding: 0;
+        }
+
+        .slot-list .empty-line:last-child {
+            margin-bottom: 0;
+        }
+
+        .watermark {
+            position: relative;
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px 0;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ccc;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .watermark.no-bottom-corners::before,
+        .watermark.no-bottom-corners::after {
+            display: none;
+        }
+
+        .watermark-top {
+            display: none;
+        }
+
+        .empty-line {
+            padding: 8px 0;
+            min-height: 20px;
+            margin-bottom: 6px;
+            color: transparent;
+        }
+
+        .empty-line::before {
+            content: '\00a0';
+        }
+
+        .export-btn {
+            background: #333;
+            color: white;
+            border: 2px solid #333;
+            padding: 10px 20px;
+            font-size: 0.9em;
+            cursor: pointer;
+            font-family: 'Alegreya', serif;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-left: 10px;
+        }
+
+        .export-btn:hover {
+            background: #555;
+            border-color: #555;
+        }
+
+        /* ==========================================================
+           PRINT / EXPORT STYLES
+           These styles control the appearance of the character sheet
+           when printed or exported to PDF. Change font sizes, padding,
+           and spacing here to adjust the print/export output
+           independently from the screen display.
+           ========================================================== */
+
+        .character-sheet.export-mode {
+            padding: 20px;
+            background: white;
+        }
+
+        .export-mode .character-header {
+            border-bottom: 2px solid #000;
+            padding: 0 0 10px 0;
+            margin-bottom: 12px;
+        }
+
+        .export-mode .character-name {
+            font-size: 1.3em;
+        }
+
+        .export-mode .character-blurb {
+            font-size: 0.9em;
+        }
+
+        .export-mode .player-field {
+            font-size: 0.8em;
+            margin-bottom: 8px;
+        }
+
+        .export-mode .luck-counter {
+            border: 2px solid #000;
+            font-size: 0.9em;
+            padding: 6px 12px;
+        }
+
+        .export-mode .sheet-section {
+            padding: 9px 0 7px 0;
+            border-bottom: 1px solid #999;
+        }
+
+        .export-mode .sheet-section:nth-last-of-type(1),
+        .export-mode .sheet-section:nth-last-of-type(2) {
+            border-bottom: none;
+        }
+
+        .export-mode .character-details-section {
+            padding-bottom: 7px;
+        }
+
+        .export-mode .sheet-section:last-of-type {
+            padding-bottom: 16px;
+            border-bottom: none;
+        }
+
+        .export-mode #approachesSection {
+            padding: 7px 0 5px 0;
+        }
+
+        .export-mode #approachesSection h2 {
+            margin-bottom: 5px;
+        }
+
+        .export-mode .sheet-section h2 {
+            font-size: 0.95em;
+            margin-bottom: 7px;
+        }
+
+        .export-mode .format-hint {
+            font-size: 0.65em;
+        }
+
+        .export-mode .details-text {
+            font-size: 0.85em;
+            line-height: 1.5;
+        }
+
+        .export-mode .approaches-list li {
+            padding: 5px 0;
+            margin-bottom: 3px;
+            font-size: 0.85em;
+        }
+
+        .export-mode .empty-line {
+            padding: 6px 0;
+            min-height: 15px;
+            margin-bottom: 4px;
+        }
+
+        .export-mode .watermark:not(.watermark-top) {
+            display: none;
+        }
+
+        .export-mode .watermark:not(.watermark-top)::before,
+        .export-mode .watermark:not(.watermark-top)::after {
+            display: none;
+        }
+
+        .export-mode .watermark-top {
+            display: block;
+            position: relative;
+            color: #ddd;
+            font-size: 0.9em;
+            margin: 0 0 10px 0;
+            padding: 10px 0 0 0;
+            text-align: left;
+            border-top: 1px solid #999;
+            border-bottom: none;
+        }
+
+        .character-sheet.export-mode::before,
+        .character-sheet.export-mode::after,
+        .export-mode .watermark::before,
+        .export-mode .watermark::after {
+            color: #333;
+            font-size: 16px;
+        }
+
+        .character-sheet.export-mode::before {
+            top: 10px;
+            left: 10px;
+        }
+
+        .character-sheet.export-mode::after {
+            top: 10px;
+            right: 10px;
+        }
+
+        .export-mode .watermark::before {
+            bottom: 10px;
+            left: 10px;
+        }
+
+        .export-mode .watermark::after {
+            bottom: 10px;
+            right: 10px;
+        }
+
+        /* Edit icon button */
+        .edit-icon {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.75em;
+            color: #555;
+            padding: 0 4px;
+            vertical-align: middle;
+            font-family: sans-serif;
+            opacity: 0.5;
+            transition: opacity 0.2s, color 0.2s;
+        }
+        .edit-icon:hover {
+            color: #333;
+            opacity: 1;
+        }
+
+        .field-text,
+        .approach-text {
+            cursor: pointer;
+        }
+
+        .edit-hint {
+            font-size: 0.95em;
+            color: #333;
+            font-style: italic;
+            margin-left: 10px;
+        }
+
+        /* Inline edit inputs */
+        .inline-edit-input,
+        .inline-edit-textarea {
+            font-family: 'Alegreya', serif;
+            font-size: inherit;
+            background: #fffff0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            padding: 2px 6px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .inline-edit-textarea {
+            min-height: 4em;
+            resize: vertical;
+        }
+
+        /* Hide edit icons and hint in export mode */
+        .export-mode .edit-icon,
+        .export-mode .edit-hint {
+            display: none !important;
+        }
+
+        /* Browser print (Ctrl+P) — page setup and hide UI controls.
+           Visual overrides come from .export-mode, applied via JS. */
+        @media print {
+            @page {
+                size: A4;
+                margin: 0.4in;
+            }
+
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+
+            .header, .controls {
+                display: none;
+            }
+
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+                margin: 0;
+                background: white;
+            }
+
+            .sheet-section {
+                page-break-inside: avoid;
+            }
+
+            .edit-icon,
+            .edit-hint {
+                display: none !important;
+            }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Plot Armor Character Generator</h1>
+            <p>Create unique characters for your Plot Armor RPG adventures</p>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <div class="control-item">
+                    <label for="genre">Genre</label>
+                    <select id="genre" onchange="updateMagicalLabel(); generateCharacter();">
+                        <option value="modern">Modern</option>
+                        <option value="fantasy">Fantasy</option>
+                        <option value="scifi">Sci-Fi</option>
+                        <option value="horror">Horror</option>
+                    </select>
+                </div>
+
+                <div class="control-item">
+                    <label for="tone">Tone</label>
+                    <select id="tone" onchange="generateCharacter()">
+                        <option value="realistic">Realistic</option>
+                        <option value="dark">Dark</option>
+                        <option value="lighthearted">Lighthearted</option>
+                    </select>
+                </div>
+
+                <div class="control-item checkbox-group">
+                    <input type="checkbox" id="magical" onchange="toggleMagical()">
+                    <label for="magical" id="magicalLabel">Include Magical Approach</label>
+                </div>
+                <div class="control-item checkbox-group">
+                    <input type="checkbox" id="leaveUndefined" onchange="toggleLeaveUndefined()">
+                    <label for="leaveUndefined">Leave one starting Approach undefined</label>
+                </div>
+            </div>
+
+            <button class="generate-btn" onclick="generateCharacter()">Generate New Character</button>
+            <button class="export-btn" onclick="printCharacter()">Print</button>
+            <button class="export-btn" onclick="exportToPDF()">Export to PDF</button>
+            <span class="edit-hint">Click &#9998; fields below to customize!</span>
+        </div>
+
+        <div class="character-sheet" id="characterSheet">
+            <!-- Character will be generated here -->
+        </div>
+    </div>
+
+    <script>
+        // All 18 Approaches from the rulebook (page 7) + some extra 'negative' ones
+        const APPROACHES = {
+            physical: [
+                'Quickly',
+                'Stealthily',
+                'Forcefully',
+                'Patiently',
+                'Flamboyantly',
+                'Recklessly',
+                'Slowly',
+            ],
+            mental: [
+                'Luckily',
+                'Cleverly',
+                'Perceptively',
+                'Mysteriously',
+                'Dramatically',
+                'Carefully',
+                'Cowardly',
+            ],
+            social: [
+                'Diplomatically',
+                'Charmingly',
+                'Bluntly',
+                'Comically',
+                'Persuasively',
+                'Confidently',
+                'Romantically'
+            ]
+        };
+
+
+        // Magical approach (optional) - varies by genre and tone
+        const MAGICAL_APPROACHES = {
+            modern: {
+                dark: 'Occultly',
+                realistic: 'Occultly',
+                lighthearted: 'Magically'
+            },
+            fantasy: {
+                dark: 'Magically',
+                realistic: 'Magically',
+                lighthearted: 'Magically'
+            },
+            scifi: {
+                dark: 'Mentally',
+                realistic: 'Mentally',
+                lighthearted: 'Mentally'
+            },
+            horror: {
+                dark: 'Occultly',
+                realistic: 'Occultly',
+                lighthearted: 'Occultly'
+            }
+        };
+
+        // Character names by genre
+        const NAMES = {
+            modern: {
+                first: [
+                    'Alex', 'Jordan', 'Casey', 'Morgan', 'Riley', 'Taylor', 'Sam', 'Quinn',
+                    'Harper', 'Avery', 'Blake', 'Drew', 'Elliot', 'Finley', 'Parker', 'Cameron',
+                    'Anna', 'Emily', 'Sophia', 'Isabella', 'Olivia', 'Mia', 'Charlotte', 'Amelia', 'Ella',
+                    'Amara', 'Jabari', 'Kofinne', 'Malaika', 'Nia', 'Zuri',
+                    'Imani', 'Aaliyah', 'Jalen', 'Malik', 'Rashad', 'Tariq', 'Avu', 'Chike', 'Obi', 'Sekou',
+                    'Mei', 'Xia', 'Ling', 'Hua', 'Jin', 'Tao', 'Fang', 'Ying', 'Qiang', 'Lei', 'Zhen',
+                    'Indra', 'Wisnu', 'Bayu', 'Dewa', 'Lesmana', 'Dewi', 'Sari', 'Putri', 'Wulan', 'Cahya'
+                ],
+                last: [
+                    'Smith', 'Johnson', 'Chen', 'Rodriguez', 'Kim', 'Patel', 'O\'Brien', 'Martinez',
+                    'Anderson', 'Taylor', 'Brown', 'Wilson', 'Davis', 'Moore', 'Garcia', 'Gertz',
+                    'Henderson', 'Lopez', 'Nguyen', 'Clark', 'Lewis', 'Walker', 'Hall', 'Allen', 'Young',
+                    'Wright', 'King', 'Scott', 'Torres', 'Ng', 'Singh', 'Khan', 'Das', 'Iyer', 'Reddy',
+                    'Okoro', 'Mensah', 'Diallo', 'Bakari', 'Jabari', 'Kamau', 'Nkrumah', 'Khumalo', 
+                    'Asante', 'Diallo', 'Conteh', 'Adisa', 'Amadi', 'Chiamaka', 'Enzi', 'Juma', 'Ezeji',
+                    'Chen', 'Li', 'Wang', 'Zhao', 'Liu', 'Zhang', 'Yang', 'Huang', 'Wu', 'Xu', 
+                    'Sun', 'Ma', 'Zhu', '', '', '', '', '', '', '', '', ''
+                ]
+            },
+            fantasy: {
+                first: [
+                    'Aldric', 'Brynn', 'Cedric', 'Elara', 'Finn', 'Gwendolyn', 'Theron', 'Lyra',
+                    'Rowan', 'Aria', 'Dorian', 'Seren', 'Kael', 'Isolde', 'Magnus', 'Selene', 
+                    'Thalia', 'Eamsa', 'Varek', 'Raraka', 'Zorin', 'Ade', 'Borin', 'Calia', 'Dara', 'Eira',
+                    'Thorand', 'Liora', 'Mira', 'Nerys', 'Orin', 'Pyria',
+                    'Quillan', 'Riven', 'Sylas', 'Talia', 'Ulric', 'Vaelin', ],
+                last: [
+                    'Stormwind', 'Ironforge', 'Shadowmere', 'Brightblade', 'Moonwhisper', 'Dragonheart',
+                    'Forneshield', 'Starweaver', 'Thornwood', 'Silverleaf', 'Flamecaller', 'Frostborn', 
+                    'Rajin', 'Alwyn', 'Danforth', 'Blackwood', 'Embion', 'Galathil', 'Hawkridge', 'Irongale',
+                    'Jorund', 'Kethril', 'Larethian', 'Mithrandir', 'Nimrodel', 'Oakenheel', 'Pyrelight',
+                    'Quenoth', 'Ravencrest', 'Sunstrider', 'Tarnhelm', 'Umbermoor', 'Valefor',
+                    '', '', '', '', '', '', ''
+                ]
+            },
+            scifi: {
+                first: [
+                    'Nova', 'Zara', 'Kip', 'Jax', 'Ren', 'Lyra', 'Atlas', 'Echo',
+                    'Kai', 'Vex', 'Axel', 'Cipher', 'Rook', 'Nexus', 'Orion', 'Anod', 'Vira', 'Sable',
+                    'Varos', 'Ana', 'Sam', 'Gareth', 'Lina', 'Tess', 'Dax', 'Rin', 'Juno', 'Zeke',
+                    'Thall', 'Eam', 'Varek', 'Rarath', 'Zor', 'Adec', 'Bortic', 'Calia', 'Dara', 'Eira',
+                    'Alice', 'Francis', 'Mary', 'Samuel', 'Clara', 'Lawrence', 'Ruth', 'Joseph',
+                    'Grace', 'Walter', 'Florence', 'Frederick', 'Agnes', 'Daniel', 'Lillian', 'George',
+                    'Ardoss', 'Chall', 'ORO-45', 'VEX-9', 'XIL-3', 'NIM-2'
+                ],
+                last: [
+                    'Voss', 'Kane', 'Reeves', 'Sterling', 'Cross', 'Hawk', 'Phoenix', 'Striker',
+                    'Drake', 'Storm', 'Cortez', 'Blackwell', 'Astrid', 'Quantum', 
+                    'Corbett', 'Thorne', 'Stone', 'Rivers', 'Barlow', 'Grimm', 'Mercer', 'Hollis',
+                    'Blake', 'Webb', 'Aldrich', 'Sterling', 'Pemberton', 'Caine', 'Thornhill', 'Pendleton',
+                    'SID06', 'Orcha', 'Zypher', 'Karalin', 'Vortan', 'Xelara', 'Draxon', 'Lunaris',
+                    '46', 'B76', 'FORAC01', 'VIN2', 'SEC-9', 'TRX-4', 'NX-11', 'QX-7', 'ZT-3', 'LMN-8',
+                    '', '', '', '', '', ''
+                ]
+            },
+            horror: {
+                first: [
+                    'Eleanor', 'Victor', 'Margaret', 'Henry', 'Catherine', 'Arthur', 'Elizabeth', 'Jonathan',
+                    'Evelyn', 'William', 'Helen', 'Charles', 'Violet', 'Thomas', 'Rose', 'Edward',
+                    'Alice', 'Francis', 'Mary', 'Samuel', 'Clara', 'Lawrence', 'Ruth', 'Joseph',
+                    'Grace', 'Walter', 'Florence', 'Frederick', 'Agnes', 'Daniel', 'Lillian', 'George',
+                    'Emma', 'Howard', 'Sarah', 'Raymond', 'Mabel', 'Eugene', 'Hazel', 'Frank',
+                    'Imani', 'Aaliyah', 'Jalen', 'Malik', 'Rashad', 'Tariq', 'Avu', 'Chike', 'Obi', 'Sekou',
+                    'Mei', 'Xia', 'Ling', 'Hua', 'Jin', 'Tao', 'Fang', 'Ying', 'Qiang', 'Lei', 'Zhen',
+                    'Indra', 'Wisnu', 'Bayu', 'Dewa', 'Lesmana', 'Dewi', 'Sari', 'Putri', 'Wulan', 'Cahya'
+                ],
+                last: [
+                    'Ashwood', 'Blackwood', 'Crane', 'Darkwater', 'Elwood', 'Graves', 'Harker', 'Ironwood',
+                    'Marsh', 'Winters', 'Carver', 'Morrow', 'Weston', 'Hawthorne', 'Sinclair', 'Lockwood',
+                    'Corbett', 'Thorne', 'Stone', 'Rivers', 'Barlow', 'Grimm', 'Mercer', 'Hollis',
+                    'Blake', 'Webb', 'Aldrich', 'Sterling', 'Pemberton', 'Caine', 'Thornhill', 'Pendleton',
+                    'Amara', 'Jabari', 'Kofinne', 'Malaika', 'Nia', 'Zuri',
+                    'Whitmore', 'Ramsey', 'Collier', 'Dunwich', 
+                    'Wright', 'King', 'Scott', 'Torres', 'Ng', 'Singh', 'Khan', 'Das', 'Iyer', 'Reddy',
+                    'Okoro', 'Mensah', 'Diallo', 'Bakari', 'Jabari', 'Kamau', 'Nkrumah', 'Khumalo', 
+                    'Asante', 'Diallo', 'Conteh', 'Adisa', 'Amadi', 'Chiamaka', 'Enzi', 'Juma', 'Ezeji',
+                    'Chen', 'Li', 'Wang', 'Zhao', 'Liu', 'Zhang', 'Yang', 'Huang', 'Wu', 'Xu', 
+                    'Sun', 'Ma', 'Zhu', '', '', ''
+                ]
+            }
+        };
+
+        // Character concepts/blurbs by genre and tone
+        const CONCEPTS = {
+            modern: {
+                realistic: [
+                    'detective investigating cold cases',
+                    'journalist chasing a story',
+                    'paramedic working night shifts',
+                    'teacher in an underfunded school',
+                    'social worker helping families',
+                    'mechanic running a non-profitable garage',
+                    'underpaid ER nurse',
+                    'firefighter with something to prove',
+                    'lawyer fighting for justice',
+                    'corrupt lawyer fighting for a big payday',
+                    'construction foreman with a troubled past',
+                    'software developer at a failing startup',
+                    'graphic designer freelancing a new weird job',
+                    'bartender with big dreams',
+                    'taxi driver with a secret life',
+                    'private chef for a demanding client',
+                    'photographer capturing urban life',
+                    'journalist uncovering corporate scandals',
+                    'environmental activist on a mission',
+                    'stay-at-home parent juggling chaos',
+                    'small business owner struggling to survive',
+                    'freelance writer chasing deadlines',
+                    'musician trying to make it big',
+                    'bartender with a knack for trouble',
+                    'barista dreaming of opening a cafe',
+                    'artist with a big debt',
+                    'struggling actor attending auditions',
+                    'homeless veteran trying to rebuild life',
+                    'reformed burglar having found faith',
+                    'reformed hacker working for a nonprofit',
+                    'hacker exposing corporate corruption',
+                    'vigilante with a personal vendetta',
+                    'amateur boxer fighting for a title',
+                    'street artist with a message',
+                    'exotic dancer with a surprising backstory',
+                    'homeless man trying to reconnect with family',
+                    'single parent with a rebellious teen',
+                    'e-sports competitor aiming for the top',
+                    'gamer streamer with a secret identity',
+                    'ride-share driver with unexpected adventures',
+                    'secret informant for the local police',
+                    'agent working undercover',
+                    'police officer on the edge',
+                    'thief dreaming of one last big score',
+                    'old soldier working as a security guard',
+                    'disillusioned priest helping the needy',
+                    'old librarian preserving forgotten knowledge',
+                    'working in a convenience store',
+                    'owns a small convenience store',
+                    'CEO with a rough home life', 
+                    'surgeon best in their field',
+                ],
+                dark: [
+                    'disgraced cop seeking redemption',
+                    'debt collector with a conscience',
+                    'former soldier haunted by the past',
+                    'private investigator in over their head',
+                    'whistleblower on the run',
+                    'ex-convict trying to go straight',
+                    'hitman with one last job',
+                    'corrupt politician\'s fixer',
+                    'addict working as an informant',
+                    'survivor of a violent crime',
+                    'disillusioned war veteran',
+                    'ex-cop turned vigilante',
+                    'forensic accountant uncovering fraud',
+                    'grieving parent seeking justice',
+                    'disgraced journalist chasing a comeback',
+                    'former sport star battling addiction',
+                    'ex-cult member trying to escape',
+                    'corrupt polce officer with gambling debts',
+                    'gambler owing money to dangerous people',
+                    'former gangster trying to live a normal life',
+                    'screwed-up tech CEO on the run',
+                    'haunted artist obsessed with death',
+                    'ex-military with PTSD',
+                    'talk show host with a dark secret',
+                    'weather presenter hiding a double life',
+                    'taxidermist with a morbid hobby',
+                    'homeless artist obsessed with decay',
+                    'paranormal podcaster chasing ghosts',
+                    'conspiracy theorist on the edge',
+                    'old soldier working as a security guard',
+                    'disillusioned priest helping the needy',
+                    'old librarian preserving forgotten knowledge',
+                    'a normal person. Just normal. Yeah.',
+                    'the one who dies first',
+                    'working in a convenience store',
+                    'owns a small convenience store',
+                    'CEO with a rough home life', 
+                    'defined by their loss',
+                    'defined by their trauma',
+                    'defined by their lost love',
+                    'surgeon who just lost their licence',
+                ],
+                lighthearted: [
+                    'clumsy but enthusiastic intern',
+                    'food truck owner with big dreams',
+                    'pet psychic who talks to animals',
+                    'aspiring stand-up comedian',
+                    'wedding planner handling chaos',
+                    'barista writing a novel',
+                    'yoga instructor spreading positivity',
+                    'tour guide with wild stories',
+                    'amateur detective solving small mysteries',
+                    'social media influencer with a quirky style',
+                    'freelance photographer chasing adventure',
+                    'aspiring chef experimenting with recipes',
+                    'street magician performing for tips',
+                    'dog walker with a big heart',
+                    'freelance writer with a vivid imagination',
+                    'romantic novelist seeking inspiration',
+                    'cheerful florist brightening people\'s days',
+                    'homeless musician spreading joy',
+                    'kids party entertainer with big dreams',
+                    'just really unlucky',
+                    'surgeon with a really silly speciality',
+                ]
+            },
+            fantasy: {
+                realistic: [
+                    'village healer making ends meet',
+                    'merchant guarding their caravan',
+                    'town guard on patrol',
+                    'apprentice wizard studying hard',
+                    'traveling bard seeking stories',
+                    'blacksmith crafting weapons',
+                    'innkeeper hearing rumors',
+                    'courier delivering messages',
+                    'hunter tracking game',
+                    'farmer protecting their land',
+                    'fisherman braving the seas',
+                    'scribe copying ancient texts',
+                    'cartographer mapping unknown lands',
+                    'herbalist gathering rare plants',
+                    'mercenary for hire',
+                    'dungeon guide leading adventurers',
+                    'alchemist experimenting with potions',
+                    'ship captain navigating treacherous waters',
+                    'pirate searching for treasure',
+                    'apprentice knight training for battle',
+                    'squire serving a noble',
+                    'servant of a wealthy lord',
+                    'court jester entertaining nobles',
+                    'royal messenger always on urgent duty',
+                    'village elder advising the community',
+                    'traveling merchant selling exotic goods',
+                    'bard seeking fame and fortune',
+                    'ranger patrolling the wilderness',
+                    'ex-soldier turned hunter',
+                    'nomadic trader crossing borders',
+                    'forest guide familiar with every trail',
+                    'shipwright building sturdy vessels',
+                    'cart driver hauling goods',
+                    'field healer used to war',
+                ],
+                dark: [
+                    'cursed knight seeking redemption',
+                    'necromancer fleeing persecution',
+                    'assassin bound by contract',
+                    'fallen paladin seeking vengeance',
+                    'warlock with a dark pact',
+                    'plague doctor from a ruined city',
+                    'vengeful spirit in mortal form',
+                    'inquisitor hunting heretics',
+                    'corrupted druid',
+                    'exile from a destroyed kingdom',
+                    'smuggler of forbidden goods',
+                    'bandit leader on the run',
+                    'disgraced noble plotting revenge',
+                    'a nobody with a deadly secret',
+                    'shadowy thief from a lawless city',
+                    'haunted ranger seeking peace',
+                    'outcast sorcerer hiding their powers',
+                    'gambler owing debts to dangerous people',
+                    'disgraced knight seeking to restore honor',
+                    'vengeful victim of betrayal',
+                    'cursed wanderer',
+                    'former cultist trying to escape',
+                    'heir to a large legacy',
+                    'the first one to die ... the first one to come back',
+                    'healer who chooses who lives and dies',
+                ],
+                lighthearted: [
+                    'bumbling wizard\'s apprentice',
+                    'enthusiastic dragon tamer',
+                    'cheerful goblin merchant',
+                    'bard who only knows one song',
+                    'overly optimistic adventurer',
+                    'fairy godparent-in-training',
+                    'accident-prone alchemist',
+                    'knight afraid of horses',
+                    'fortune teller with unclear visions',
+                    'chef seeking legendary ingredients',
+                    'jovial innkeeper',
+                    'traveling minstrel spreading joy',
+                    'curious gnome inventor',
+                    'playful sprite causing mischief',
+                    'eager squire dreaming of knighthood',
+                    'wicked witch with a heart of gold',
+                    'talkative parrot familiar',
+                    'healer that heals more than intended',
+                ]
+            },
+            scifi: {
+                realistic: [
+                    'cargo ship pilot making runs',
+                    'station engineer fixing systems',
+                    'xenobiologist studying aliens',
+                    'colonial surveyor mapping planets',
+                    'medic on a research vessel',
+                    'miner extracting resources',
+                    'communications officer',
+                    'security contractor on patrol',
+                    'terraforming specialist',
+                    'merchant dealing in rare goods',
+                    'freelance pilot taking jobs',
+                    'smuggler running contraband',
+                    'bounty hunter tracking targets',
+                    'explorer charting new worlds',
+                    'diplomat negotiating treaties',
+                    'space trucker hauling weird cargo',
+                    'roboticist with a curious speciality',
+                    'drone operator surveilling dangerous areas',
+                    'salvage operator recovering lost tech',
+                    'cybernetic technician upgrading discerning clients',
+                    'cybernetic doc helping those in need',
+                    'data courier transporting sensitive info',
+                    'exosuit soldier for hire',
+                    'freelance hacker taking jobs',
+                    'homeless scavenger searching for tech',
+                    'space janitor keeping things clean',
+                    'owns a small repair shop',
+                    'works as a mechanic on a space station',
+                    'runs a small cantina',
+                    'seller of exotic wares',
+                    'field medic used to war',
+                ],
+                dark: [
+                    'bounty hunter tracking targets',
+                    'corporate assassin',
+                    'war veteran with cybernetic implants',
+                    'rogue AI in synthetic body',
+                    'space pirate with a price on their head',
+                    'escaped experiment',
+                    'black market smuggler',
+                    'disgraced military officer',
+                    'debt slave on the run',
+                    'hacker selling secrets',
+                    'ex-corporate spy out in the cold',
+                    'cybernetic mercenary',
+                    'cyber-ninja with a surprising liability',
+                    'gambler having someone to care for',
+                    'old soldier having seen too much',
+                    'disillusioned scientist',
+                    'mad genius with dangerous inventions',
+                    'old soldier with a glimmer of hope',
+                    'ex-pilot who got too close to a black hole',
+                    'smuggler owing money to dangerous people',
+                    'former cultist trying to escape',
+                    'heir to a legacy of power',
+                    'CEO of a failing startup',
+                    'riches to rags',
+                    'defined by their loss',
+                    'field medic who just lost their licence',
+                ],
+                lighthearted: [
+                    'optimistic space explorer',
+                    'alien diplomat learning human customs',
+                    'robot learning to be human',
+                    'interstellar food critic',
+                    'space janitor saving the day',
+                    'enthusiastic xenozoologist',
+                    'time traveler causing chaos',
+                    'android comedian',
+                    'cosmic tour guide',
+                    'telepathic pet trainer',
+                    'drone racer',
+                    'holographic artist with big dreams',
+                    'space podcaster exploring the galaxy',
+                    'reporter for an intergalactic news show',
+                    'reality TV star traveling the stars',
+                    'former child star trying to make a comeback',
+                    'boy band member on a galactic tour',
+                    'alien fashion designer',
+                    'cybernetic musician',
+                    'professional gamer competing in zero-g tournaments',
+                    'field medic who you don\'t want to treat you',
+                ]
+            },
+            horror: {
+                realistic: [
+                    'paranormal investigator seeking truth',
+                    'journalist covering strange occurrences',
+                    'psychologist treating unusual cases',
+                    'small-town sheriff seeing odd things',
+                    'archivist discovering disturbing records',
+                    'medical examiner with inexplicable cases',
+                    'librarian researching local legends',
+                    'private detective tracking missing persons',
+                    'academic studying folklore',
+                    'night shift worker witnessing the unexplained',
+                    'security guard',
+                    'gravedigger with a practical mind',
+                    'student researching urban legends',
+                    'curious young adult exploring things they shouldn\'t',
+                    'podcaster chasing spooky stories',
+                    'taxidermist with a morbid hobby',
+                    'strange antique dealer',
+                    'national park tour guide that saw something',
+                    'cryptid hunter',
+                    'hacker with conspiracy theories',
+                    'works at a convenience store',
+                    'owns a convenience store in a bad neighborhood',
+                    'radio host covering bizarre topics',
+                    'documentary filmmaker chasing the weird',
+                    'just a normal person who wants a normal life',
+                    'field medic tired of war',
+                ],
+                dark: [
+                    'survivor of a supernatural massacre',
+                    'person slowly transforming into something else',
+                    'medium cursed by vengeful spirits',
+                    'former cultist trying to escape',
+                    'heir to a legacy of madness',
+                    'asylum patient who sees too much',
+                    'possessed individual fighting for control',
+                    'last survivor of a doomed bloodline',
+                    'keeper of forbidden knowledge',
+                    'a monster in disguise',
+                    'barely keeping the monster inside',
+                    'exorcist haunted by past failures',
+                    'investigator chasing a personal demon',
+                    'grieving parent dealing with loss',
+                    'disgraced priest seeking redemption',
+                    'paranormal researcher obsessed with the occult',
+                    'cursed wanderer',
+                    'con artist exploiting fears',
+                    'haunted artist obsessed with death',
+                    'owns a convenience store in a bad neighborhood',
+                    'lives on the streets trying to survive',
+                    'the one destined to die first',
+                    'field medic who just lost their licence',
+                ],
+                lighthearted: [
+                    'bumbling ghost hunter with a YouTube channel',
+                    'young werewolf trying to live normally',
+                    'clumsy vampire avoiding sunlight',
+                    'amateur exorcist in over their head',
+                    'monster movie enthusiast living the dream',
+                    'accidentally immortal trying to fit in',
+                    'friendly neighborhood zombie',
+                    'witch whose spells go hilariously wrong',
+                    'psychic with selective and unreliable visions',
+                    'cryptid researcher who keeps getting pranked',
+                    'paranormal podcaster who doesn\'t believe in ghosts',
+                    'con artist specializing in tricking the superstitious',
+                    'ghost tour guide with a flair for the dramatic',
+                    'ghost-buster-in-training',
+                    'field medic who you don\'t want to treat you',
+                ]
+            }
+        };
+
+        // Approach explanations by genre
+        const APPROACH_EXPLANATIONS = {
+            modern: {
+                Quickly: [
+                    'I was always fast on my feet',
+                    'of years of track and field',
+                    'I think fast under pressure',
+                    'life is too short to dally',
+                    'I have reflexes like a cat',
+                    'because my fingers never stop moving',
+                    'I\'m impulsive',
+                    'I don\'t think things through',
+                    'I\'m always running from something',
+                    'if I slow down, the past catches up'
+                ],
+                Stealthily: [
+                    'I had to lear to move quietly as a kid',
+                    'I\'m small an can easily hide',
+                    'people tend to forget my face',
+                    'too much attention scares me',
+                    'I\'m  trained in reconnaissance',
+                    'I\'m ashamed of what I do',
+                    'on the net, I\'m a ghost',
+                    'I hide from my responsibilities',
+                    'people are looking for me',
+                    'I can\'t let anyone know who I really am'
+                ],
+                Forcefully: [
+                    'I never back down from a fight',
+                    'I grew up in a rough neighborhood',
+                    'I hit the gym regularly',
+                    'strength solves problems',
+                    'I intimidate people easily',
+                    'I\'m a bully at heart',
+                    'it hides the hole in my heart',
+                    'violence is all I know',
+                    'I learned it from someone who hurt me'
+                ],
+                Patiently: [
+                    'eventually, people tell me what I need to know',
+                    'good things come to those who wait',
+                    'I\'m calm under pressure',
+                    'I plan everything carefully',
+                    'I was trained to not rush into things',
+                    'it was how I survived that incident',
+                ],
+                Flamboyantly: [
+                    'I love being the center of attention',
+                    'style is the only thing that matters',
+                    'I make everything a performance',
+                    'I\'m naturally theatrical',
+                    'confidence can get you anywhere',
+                    'I must prove myself to someone',
+                    'if I don\'t overdo it, I\'m invisible',
+                    'of all the times I was paraded on stage',
+                ],
+                Recklessly: [
+                    'I act first, think later',
+                    'fortune favors the bold',
+                    'caution is for cowards',
+                    'I trust my instincts',
+                    'I live for the thrill',
+                    'if I stop to think, I freeze'
+                ],
+                Slowly: [
+                    'I take my time with everything',
+                    'rushing leads to mistakes',
+                    'I\'m methodical by nature',
+                    'slow and steady wins the race',
+                    'if I hurry, I mess up',
+                    'if I move too fast, I lose control of myself',
+                ],
+                Luckily: [
+                    'things just work out for me',
+                    'I was born under a lucky star',
+                    'I trust in chance',
+                    'coincidences happen around me',
+                    'I always land on my feet',
+                    'I believe consequences happen to other people',
+                    'one day I\'ll pay, just not today ... I hope'
+                ],
+                Cleverly: [
+                    'I think outside the box',
+                    'I was trained from a young age',
+                    'people always underestimate me',
+                    'education is my weapon',
+                    'I see patterns others miss',
+                    'I manipulate people',
+                    'I think I\'m smarter than everyone else',
+                    'I\'m weak in so many other ways'
+                ],
+                Perceptively: [
+                    'I notice things others do not',
+                    'I read people well',
+                    'I trust my intuition',
+                    'details matter',
+                    'I see patterns where others see chaos',
+                ],
+                Mysteriously: [
+                    'I must keep my secrets close to survive',
+                    'people find me enigmatic',
+                    'I prefer to work in the shadows',
+                    'I want people to think I\'m more interesting than I am',
+                    'I cultivate intrigue even when there is none',
+                    'I have a past I can\'t talk about',
+                    'no one can know what I did',
+                    'some times the memory of a past life comes back'
+                ],
+                Dramatically: [
+                    'everything is a story',
+                    'I make moments memorable',
+                    'I have a flair for the theatrical',
+                    'I play to my audience',
+                    'emotions drive me'
+                ],
+                Carefully: [
+                    'I plan everything',
+                    'I\'m risk-averse',
+                    'I check twice, act once',
+                    'preparation is everything',
+                    'I don\'t make mistakes',
+                    'I\'m afraid of my own shadow',
+                    'I\'m paralyzed by indecision',
+                    'I made a mistake once that haunts me',
+                    'I can\'t afford another failure'
+                ],
+                Cowardly: [
+                    'I avoid confrontation',
+                    'survival is more important than pride',
+                    'I will win at any cost',
+                    'fear keeps me alive',
+                    'I\'m not brave, just practical',
+                    'I saw what happens to heroes',
+                    'I lost everyone who was brave'
+                ],
+                Diplomatically: [
+                    'I smooth over conflicts',
+                    'words are my weapon',
+                    'everyone can be reasoned with',
+                    'I try to find common ground even when there is none',
+                    'everything is open to negotiaton',
+                    'I\'m a people-pleaser',
+                    'one time I said the wrong thing and it cost me dearly'
+                ],
+                Charmingly: [
+                    'people naturally like me',
+                    'I smile my way through life',
+                    'charisma is my gift',
+                    'I make friends easily',
+                    'a kind word opens doors',
+                    'I manipulate with smiles',
+                    'it\'s all an act',
+                    'if people saw the real me, they\'d run',
+                    'it\'s how I survived my past'
+                ],
+                Bluntly: [
+                    'I say what I think',
+                    'honesty is the best policy',
+                    'I don\'t sugarcoat',
+                    'I think people respect straight talk',
+                    'there is no time for games',
+                    'I\'m rude',
+                    'I don\'t care about feelings',
+                    'because people have hurt me before',
+                    'I push people away before they can hurt me',
+                    'I have no filter',
+                    'because I\'m angry all the time'
+                ],
+                Comically: [
+                    'humor is my defense',
+                    'I make people laugh',
+                    'I don\'t take life seriously',
+                    'a joke defuses tension',
+                    'I clown around',
+                    'it\'s how I cope with things',
+                ],
+                Persuasively: [
+                    'I convince people',
+                    'I make compelling arguments',
+                    'I sell my vision',
+                    'I know what people want to hear',
+                    'I\'m naturally convincing',
+                    'I have an agenda, and I push it'
+                ],
+                Confidently: [
+                    'I trust myself',
+                    'self-assurance is my strength',
+                    'if I believe it, others will too',
+                    'I have real authority to back it up',
+                    'certainty inspires others',
+                    'I fake it till I make it',
+                    'I\'m hiding my insecurities',
+                ],
+                Romantically: [
+                    'I lead with my heart',
+                    'love conquers all',
+                    'I see beauty in everything',
+                    'passion drives me',
+                    'I believe in grand gestures',
+                    'I\'m blinded by love',
+                    'I\'m obsessed with someone',
+                    'it\'s the best way to get what I want',
+                    'I see my beloved in everyone',
+                    'I see the world through rose-colored glasses',
+                    'I\'m young and naive'
+                ],
+                Magically: [
+                    'I have a gift for the supernatural',
+                    'I studied the mystical arts',
+                    'magic runs in my blood',
+                    'I channel strange powers',
+                    'I touch the otherworldly',
+                    'I was chosen by forces beyond',
+                    'there is something strange about me',
+                    'I see things others cannot'
+                ],
+                Occultly: [
+                    'I dabble in forbidden knowledge',
+                    'dark forces whisper to me',
+                    'I made a pact I can\'t break',
+                    'I read the old grimoires - I wish I hadn\'t',
+                    'I channel things best left alone',
+                    'my parents me to see beyond the veil',
+                    'I must hide what I am',
+                    'I must stay ahead of that which hunts me',
+                    'I cannot escape my destiny',
+                    'sometimes IT just ... emerges from me',
+                    'sometimes IT takes me over',
+                ]
+            },
+            fantasy: {
+                Quickly: [
+                    'elven blood gives me speed',
+                    'I trained with the ranger corps',
+                    'I\'m light as the wind',
+                    'my reflexes are supernatural',
+                    'I move like lightning',
+                    'I rush into danger foolishly',
+                    'impatience is my curse',
+                    'a god granted me speed',
+                    'I sold my soul the swiftness to save a friend',
+                    'I\'m not human anymore'
+                ],
+                Stealthily: [
+                    'I walk the shadow paths',
+                    'I\'m trained in the assassin\'s art',
+                    'I learned to hide from predators',
+                    'silence is my ally',
+                    'I blend with darkness',
+                    'I can change my shape',
+                    'I skulk like a thief',
+                    'I hide from my oaths',
+                    'I fled from those who trusted me',
+                    'I cannot face what I once was',
+                    'it is part of my nature'
+
+                ],
+                Forcefully: [
+                    'I wield the strength of giants',
+                    'I trained as a warrior',
+                    'my ancestors were berserkers',
+                    'raw power is my weapon',
+                    'I break what opposes me',
+                    'I\'m a brute by nature',
+                    'I solve everything with violence',
+                    'I was trained as a weapon',
+                    'bloodshed is all I know from my past',
+                    'I was created for war',
+                    'I was cursed to be a monster',
+                    'I made a deal for strength',
+                    'I found power in dark places',
+                ],
+                Patiently: [
+                    'I studied with monks',
+                    'dwarven patience runs in my veins',
+                    'I learned wisdom through meditation',
+                    'time is on my side',
+                    'I await the perfect moment',
+                    'I endured great trials on a mountain top',
+                    'I was imprisoned for years',
+                    'my revenge will be all the sweeter for the wait',
+                ],
+                Flamboyantly: [
+                    'I live like legends do',
+                    'bardic flair is in my blood',
+                    'I make my mark on history',
+                    'glory demands spectacle',
+                    'I perform for the gods',
+                    'I can always draw a crowd',
+                    'performance is how I survived',
+                    'when I cannot fight, I distract',
+                    'fast talking saved me more than once'
+                ],
+                Recklessly: [
+                    'battle-fury drives me',
+                    'I have nothing to lose',
+                    'heroes are bold',
+                    'danger doesn\'t scare me',
+                    'fate will decide',
+                    'when honor calls, I answer without thought',
+                ],
+                Slowly: [
+                    'I move with deliberate purpose',
+                    'haste makes waste in battle',
+                    'I am patient as stone',
+                    'I am a wise old soul that has seen the world',
+                    'I\'m old and brittle',
+                    'my body is made of stone', 
+                    'I am a walking tank',
+                ],
+                Luckily: [
+                    'the gods favor me',
+                    'fortune smiles on my endeavors',
+                    'I was blessed at birth',
+                    'destiny protects me',
+                    'luck is the only thing I ever got',
+                    'I\'m a professional gambler', 
+                    'I make my own luck',
+                ],
+                Cleverly: [
+                    'I studied at the academy',
+                    'I solve ancient riddles',
+                    'wisdom is my weapon',
+                    'I outwit my foes',
+                    'knowledge is power',
+                    'I deceive and scheme',
+                    'I think myself superior to all',
+                    'it allows me to hide my weaknesses',
+                ],
+                Perceptively: [
+                    'I have the sight',
+                    'I sense the unseen',
+                    'my awareness is supernatural',
+                    'I read omens',
+                    'nothing escapes my notice',
+                    'I once avoided a deadly trap',
+                ],
+                Mysteriously: [
+                    'I keep my secrets close',
+                    'ancient knowledge guides me',
+                    'I walk between worlds',
+                    'enigma is my shield',
+                    'I speak in riddles',
+                    'I bear a curse I cannot speak of',
+                    'my true identity must remain hidden',
+                    'I am hunted for what I was',
+                    'I am hunted for what I am'
+                ],
+                Dramatically: [
+                    'I live for the epic moment',
+                    'legends are made of drama',
+                    'I channel divine passion',
+                    'every act is mythic',
+                    'fate itself watches me'
+                ],
+                Carefully: [
+                    'I learned wizard\'s precision',
+                    'I plan like a master tactician',
+                    'caution kept me alive',
+                    'I prepare for everything',
+                    'I never act rashly',
+                    'I\'m terrified of danger',
+                    'fear paralyzes me',
+                    'one mistake cost me everything',
+                    'I failed once and cannot fail again'
+                ],
+                Cowardly: [
+                    'I flee from danger',
+                    'the coward survives the battle',
+                    'fear is my constant companion',
+                    'I hide when threats appear',
+                    'bravery is for fools',
+                    'I watched the brave ones die',
+                    'I deserted when my comrades needed me'
+                ],
+                Diplomatically: [
+                    'I negotiated between kingdoms',
+                    'I speak many tongues',
+                    'I unite disparate peoples',
+                    'words prevent bloodshed',
+                    'I broker peace'
+                ],
+                Charmingly: [
+                    'fey blood makes me appealing',
+                    'I enchant with my presence',
+                    'people trust me easily',
+                    'charisma is my birthright',
+                    'I win hearts',
+                    'I use glamour to deceive',
+                    'my charm is a mask'
+                ],
+                Bluntly: [
+                    'I speak with dwarven directness',
+                    'I cut through deception',
+                    'truth is my weapon',
+                    'I don\'t mince words',
+                    'honesty is honor',
+                    'I\'m crude and tactless',
+                    'I insult without thinking'
+                ],
+                Comically: [
+                    'I jest like a fool',
+                    'humor is my defense',
+                    'I make light of danger',
+                    'laughter is powerful',
+                    'I play the trickster'
+                ],
+                Persuasively: [
+                    'I rally armies with words',
+                    'I inspire followers',
+                    'my voice carries weight',
+                    'I convince with ease',
+                    'rhetoric is my art'
+                ],
+                Confidently: [
+                    'I carry myself like royalty',
+                    'I never show fear',
+                    'certainty is my armor',
+                    'I lead naturally',
+                    'presence commands respect'
+                ],
+                Romantically: [
+                    'I follow my heart above all',
+                    'love is the greatest magic',
+                    'I seek true connection',
+                    'passion guides my sword',
+                    'I romance danger itself',
+                    'the knightly code compels me',
+                    'I do everything in the name of my beloved',
+                    'I see the world through rose-colored glasses',
+                    'I am young and naive',
+                    'I\'m hopelessly in love'
+                ],
+                Magically: [
+                    'I studied at the best schools',
+                    'I\'m a natural',
+                    'I bend reality with will',
+                    'I studied with a knightly order of mages',
+                    'a parent taught me the arts',
+                    'as a kid, I was way too curious',
+                    'magic is my birthright',
+                    'I made a pact for power',
+                    'I was chosen by mystical forces',
+                    'it\'s the only thing I\'m really good at'
+                ]
+            },
+            scifi: {
+                Quickly: [
+                    'my cybernetics enhance speed',
+                    'I have enhanced reflexes',
+                    'I\'m augmented for velocity',
+                    'I pilot at high speeds',
+                    'I race for extra cash',
+                    'my neural implants accelerate me',
+                    'I\'m reckless',
+                    'I skip safety protocols',
+                    'I\'m running from my past',
+                    'if I stop moving, they\'ll find me'
+                ],
+                Stealthily: [
+                    'I have stealth implants',
+                    'I trained in covert ops',
+                    'I\'m a ghost in the system',
+                    'my face is easily forgotten',
+                    'I can change my face',
+                    'I spy and sabotage',
+                    'I lurk in the dark web',
+                    'there are people hunting me across systems',
+                    'I erased my identity to survive'
+                ],
+                Forcefully: [
+                    'I have combat augmentations',
+                    'strength enhancers boost me',
+                    'I\'m built like a tank',
+                    'raw power wins',
+                    'I break through obstacles',
+                    'I\'m a thug with tech',
+                    'violence is my first option',
+                    'I was designed as a weapon',
+                    'war is the only thing I understand'
+                ],
+                Patiently: [
+                    'I\'m trained in surveillance',
+                    'I calculate every move',
+                    'time means nothing to me',
+                    'I wait for the perfect shot',
+                    'patience is tactical'
+                ],
+                Flamboyantly: [
+                    'I make an entrance',
+                    'style is substance',
+                    'I\'m a celebrity',
+                    'my reputation precedes me',
+                    'I live large'
+                ],
+                Recklessly: [
+                    'I take crazy risks',
+                    'I trust my luck',
+                    'fear is for grounders',
+                    'I fly by instinct',
+                    'calculated chaos'
+                ],
+                Slowly: [
+                    'I process everything methodically',
+                    'systems require careful operation',
+                    'I never rush procedures',
+                    'deliberate action prevents accidents',
+                    'I analyze before I act'
+                ],
+                Luckily: [
+                    'probability favors me',
+                    'I beat the odds',
+                    'I always roll sixes',
+                    'my luck is legendary',
+                    'chance is on my side'
+                ],
+                Cleverly: [
+                    'my neural implants help me think',
+                    'I hack any system',
+                    'I\'m a genius',
+                    'I solve complex problems',
+                    'intelligence is my edge',
+                    'I exploit vulnerabilities',
+                    'I think organics are inferior'
+                ],
+                Perceptively: [
+                    'my sensors miss nothing',
+                    'I have enhanced awareness',
+                    'I read micro-expressions',
+                    'I scan constantly',
+                    'my perception is augmented'
+                ],
+                Mysteriously: [
+                    'I keep my past secret',
+                    'I\'m an enigma',
+                    'classified background',
+                    'I work in intelligence',
+                    'nobody knows my real identity',
+                    'my records were wiped for a reason',
+                    'I\'m not who I used to be',
+                    'my past is classified even from me'
+                ],
+                Dramatically: [
+                    'I live like in the vids',
+                    'everything\'s a production',
+                    'I channel the dramatic',
+                    'I make moments cinematic',
+                    'style over substance'
+                ],
+                Carefully: [
+                    'I triple-check everything',
+                    'protocols exist for a reason',
+                    'I run diagnostics',
+                    'I plan meticulously',
+                    'precision is survival',
+                    'I\'m paranoid',
+                    'fear controls my every move',
+                    'one mistake killed my crew',
+                    'I can never let it happen again'
+                ],
+                Cowardly: [
+                    'I hate violence',
+                    'striking from below is better',
+                    'discretion is the better part of valor',
+                    'I always have an escape route',
+                    'fear keeps you breathing',
+                    'I don\'t take unnecessary risks',
+                    'I saw everyone die when the ship went down',
+                    'I abandoned my post to survive'
+                ],
+                Diplomatically: [
+                    'I negotiate treaties',
+                    'I speak alien languages',
+                    'I bridge cultures',
+                    'words prevent wars',
+                    'I have implants for it',
+                    'I can read body language',
+                    'I always know a guy',
+                ],
+                Charmingly: [
+                    'my social implants help',
+                    'I read people easily',
+                    'I make connections',
+                    'charisma is programmed',
+                    'people trust me',
+                    'I run social algorithms to manipulate',
+                    'my charm is synthetic'
+                ],
+                Bluntly: [
+                    'I say it straight',
+                    'no time for politics',
+                    'direct is efficient',
+                    'I cut through BS',
+                    'honesty is policy',
+                    'I\'m tactless',
+                    'social protocols mean nothing to me'
+                ],
+                Comically: [
+                    'humor keeps me sane',
+                    'I crack jokes',
+                    'laughter is universal',
+                    'I\'m the comic relief',
+                    'jokes defuse tension'
+                ],
+                Persuasively: [
+                    'I convince anyone',
+                    'my arguments are logical',
+                    'I sell my vision',
+                    'rhetoric is programmed',
+                    'I inspire crews'
+                ],
+                Confidently: [
+                    'I never show doubt',
+                    'certainty is key',
+                    'I project authority',
+                    'confidence wins',
+                    'I lead naturally'
+                ],
+                Romantically: [
+                    'I follow my heart through the stars',
+                    'love transcends species',
+                    'I seek connection everywhere',
+                    'passion fuels my journey',
+                    'I believe in cosmic romance'
+                ],
+                Magically: [
+                    'I channel psionic energy',
+                    'I have unexplained abilities',
+                    'I manipulate probability fields',
+                    'I tap the quantum realm',
+                    'my powers defy science'
+                ],
+                Mentally: [
+                    'I have psionic abilities',
+                    'my mind is enhanced',
+                    'I trained in mental disciplines',
+                    'I read thoughts',
+                    'telepathy comes naturally',
+                    'my psychic powers manifest',
+                    'neural implants unlocked my potential'
+                ]
+            },
+            horror: {
+                Quickly: [
+                    'I learned to run from things in the dark',
+                    'survival depends on speed',
+                    'I\'ve outrun death before',
+                    'hesitation means death',
+                    'my instincts scream at me to move',
+                    'I\'m always fleeing',
+                    'panic drives my every action',
+                    'something is always chasing me',
+                    'I can still hear it behind me'
+                ],
+                Stealthily: [
+                    'I learned to hide from things that hunt',
+                    'silence keeps me alive',
+                    'I move through shadows unseen',
+                    'they can\'t kill what they can\'t find',
+                    'I studied the art of concealment',
+                    'I\'m afraid to be noticed',
+                    'hiding is all I know',
+                    'I disappeared once and can\'t come back',
+                    'I must never be seen for what I am'
+                ],
+                Forcefully: [
+                    'I fight tooth and nail',
+                    'violence is the only language monsters understand',
+                    'I break what threatens me',
+                    'brute force keeps me breathing',
+                    'I learned to hit hard and fast',
+                    'I\'m more monster than human now',
+                    'bloodlust drives me',
+                    'the beast inside demands violence',
+                    'I killed to survive and never stopped'
+                ],
+                Patiently: [
+                    'I wait for the perfect moment to strike',
+                    'rushing gets you killed',
+                    'I learned patience in the long dark',
+                    'predators wait for their prey',
+                    'time is on my side',
+                    'fear has made me patient',
+                    'I\'ve been waiting for so long'
+                ],
+                Flamboyantly: [
+                    'I face horror with style',
+                    'theatricality unnerves even monsters',
+                    'I perform even in the face of death',
+                    'flair is my shield against darkness',
+                    'I make my stand dramatically'
+                ],
+                Recklessly: [
+                    'caution won\'t save you from the inevitable',
+                    'I\'ve seen too much to fear death',
+                    'desperation makes me bold',
+                    'I have nothing left to lose',
+                    'madness drives me forward',
+                    'I stopped caring if I live or die'
+                ],
+                Slowly: [
+                    'I move with deliberate caution',
+                    'haste awakens sleeping horrors',
+                    'I\'ve learned to be methodical',
+                    'careful movement keeps me alive',
+                    'I observe before acting',
+                    'fear paralyzes me',
+                    'every step might be my last'
+                ],
+                Luckily: [
+                    'fortune favors me inexplicably',
+                    'I survive when others don\'t',
+                    'fate has plans for me',
+                    'coincidences keep me alive',
+                    'something protects me',
+                    'I\'m cursed to survive',
+                    'I wish my luck would run out'
+                ],
+                Cleverly: [
+                    'I outwit the supernatural',
+                    'intelligence is my weapon',
+                    'I solve the unsolvable',
+                    'I understand forbidden patterns',
+                    'knowledge is survival',
+                    'I know too much',
+                    'my mind was touched by something',
+                    'the things I\'ve learned haunt me'
+                ],
+                Perceptively: [
+                    'I sense things others miss',
+                    'I see beyond the veil',
+                    'my awareness kept me alive',
+                    'I notice the signs of danger',
+                    'I read the supernatural',
+                    'I see things no one should see',
+                    'visions plague my waking hours',
+                    'I can\'t unsee what I\'ve witnessed'
+                ],
+                Mysteriously: [
+                    'I keep my true nature hidden',
+                    'enigma is my protection',
+                    'secrets keep me safe',
+                    'I walk between worlds',
+                    'nobody knows what I am',
+                    'my past is unknowable',
+                    'I don\'t remember what I was',
+                    'the truth about me would destroy everything'
+                ],
+                Dramatically: [
+                    'I face horror with passion',
+                    'every moment is life or death',
+                    'I embrace the theatrical',
+                    'drama is my armor',
+                    'I make my final stand epic'
+                ],
+                Carefully: [
+                    'caution has kept me alive',
+                    'I plan for every contingency',
+                    'one mistake means death',
+                    'I prepare obsessively',
+                    'vigilance is survival',
+                    'paranoia keeps me breathing',
+                    'I can never let my guard down',
+                    'I failed once and paid the price',
+                    'everyone I didn\'t protect died'
+                ],
+                Cowardly: [
+                    'I run from danger',
+                    'fear guides my choices',
+                    'survival matters more than bravery',
+                    'I know when to flee',
+                    'cowards live longest',
+                    'I watched the brave ones die',
+                    'I abandoned them all to save myself',
+                    'I hear their screams every night'
+                ],
+                Diplomatically: [
+                    'I negotiate even with monsters',
+                    'words can pacify the supernatural',
+                    'I broker deals with darkness',
+                    'I talk my way out of death',
+                    'even demons can be reasoned with'
+                ],
+                Charmingly: [
+                    'I disarm with personality',
+                    'charm works on all creatures',
+                    'I make friends with the damned',
+                    'supernatural beings find me appealing',
+                    'charisma is my shield',
+                    'I seduce my way to survival',
+                    'they all fall for my act'
+                ],
+                Bluntly: [
+                    'I speak the terrible truth',
+                    'honesty in the face of horror',
+                    'I don\'t sugarcoat the nightmare',
+                    'directness cuts through illusion',
+                    'I say what everyone fears',
+                    'I\'m too broken to lie',
+                    'I stopped caring about feelings'
+                ],
+                Comically: [
+                    'humor keeps the darkness at bay',
+                    'I laugh in the face of horror',
+                    'jokes are my coping mechanism',
+                    'I find absurdity in terror',
+                    'laughter is how I survive',
+                    'it\'s laugh or go mad',
+                    'I broke a long time ago - this is all I have left'
+                ],
+                Persuasively: [
+                    'I convince others to help',
+                    'I rally people against darkness',
+                    'my words inspire courage',
+                    'I make believers of skeptics',
+                    'rhetoric is my weapon',
+                    'my agenda drives me'
+                ],
+                Confidently: [
+                    'I face horror without flinching',
+                    'certainty is my strength',
+                    'I project fearlessness',
+                    'confidence keeps others calm',
+                    'I never show my terror',
+                    'it\'s all a mask',
+                    'I\'m terrified but can\'t show it'
+                ],
+                Romantically: [
+                    'I follow my heart into darkness',
+                    'love transcends horror',
+                    'passion guides me through nightmare',
+                    'I would face anything for love',
+                    'even monsters can feel',
+                    'I fell in love with something inhuman',
+                    'my heart belongs to the damned',
+                    'my love is not what they seem - and I don\'t care'
+                ],
+                Occultly: [
+                    'I channel dark forces',
+                    'I learned forbidden rituals',
+                    'I commune with the other side',
+                    'I wield cursed power',
+                    'I made a pact with darkness',
+                    'the entity inside me grants power',
+                    'I must act before it consumes me',
+                ]
+            }
+        };
+
+        // Character details by genre and tone - modular components
+        const CHARACTER_DETAILS = {
+            modern: {
+                realistic: [
+                    `I escaped the streets by joining the military. It was my home, and I took pride in it.
+                    Now that I'm a civilian, I'm lost. I dress in military fatigues, and have a no-nonsense 
+                    look about me.`,
+                    `I came from a working-class background and started at the bottom, working odd jobs to
+                    get by. Past mistakes still haunt me - I feel like there's a trail of disappinted people 
+                    waiting for me to fix my life. Living paycheck to paycheck is wearing me down. I need 
+                    some change.`,
+                    `I lost my parents at an early age and had to fend for myself. The struggles made me
+                    who I am today—gritty and independent, always looking out for number one. I try to 
+                    avoid attention, but my eyes are memorable - striking and intense.`,
+                    `From a young age, I was told what to become. I trained for years, dedicated myself to 
+                    my craft. Those years of dedication earned me a good reputation. I'm competent and 
+                    appreciated, but I can't but feel sad over all the opportunities I missed pursuing my 
+                    goals, all the people I left behind.`,
+                    `I grew up in a poor family, and promised my parents to do better than them. I constantly 
+                    move from quick-money scheme to quick-money scheme, with debt collectors just one 
+                    step behind. No matter what, it seems I just don't have enough money for the life I 
+                    want to live, so I push on to the next big score. My main feature is that I have a 
+                    memorable voice.`,
+                    `I slacked off in school but learned on the job, eventually showing real aptitude.
+                    Unfortunately, my colleagues hate me, and a recent failure shook my confidence ... but 
+                    I'm driven by a desire to do the right thing. I have an unusual haircut and give off strange 
+                    vibes to those around me.`,
+                    `I was a criminal once, but chose a different path to save someone I love. I sacrificed a 
+                    lot to get where I am, stepping on others to climb higher. But that must change - people 
+                    depend on me now, and I can't let them down.`,
+                    `I worked my way up through experience. My family is a mess, and complicated everything.
+                    Because of them I struggle to make ends meet while working multiple jobs. I take my work 
+                    seriously despite feeling exhausted. One of those days I fear I will snap.`,
+                    `I grew up in a working-class neighborhood and learned from my family. I lost a friend
+                    and mentor along the way, this still hurts. To me, appearances are everything - I maintain 
+                    high standards by living beyond my means. I have big dreams, but it doesn't help that I 
+                    am pretty ugly.`,
+                    `I was always the survivor, and in the past I had to sell someone out to get ahead. 
+                    That choice still weighs on me. Now I'm stuck with my choices. I'm looking for a way 
+                    out of this life, while trying to keep up appearances.`,
+                    `I got into trouble as a youth and am secretly still involved in criminal activities.
+                    I'm not happy with where I am, but I'm good at what I do - too good. I keep pushing
+                    forward, living a double life; the true one, and the one I show the world.`,
+                    `I came from nothing and overcame a lot to succeed. Multiple jobs barely
+                    keep me afloat, but I refuse to give up - I always get back up even when pushed down.
+                    I am not memorable, but people tend to like me.`,
+                    `I'm a loser who got lucky once and rode it out. I'm still trying to outrun my past, 
+                    but I can feel it catching up to me. I have a lot of vices, and my reputation is the 
+                    only thing preventing me from falling far and deep.`
+                ],
+                dark: [ `Hardship marked me deeply in my early years. For a while, violence shaped everything 
+                    I knew. To survive, I betrayed one who trusted me. I'm always looking over my shoulder,
+                    convinced they are still hunting me to this day. I have haunted eyes and dress to blend in.`,
+                    `I survived dark times. Addiction nearly destroyed me, and the things I've seen changed 
+                    me forever. That life is always trying to pull me back, but I try to make amends 
+                    for what I've done, to those I've erred.. Scars both visible and hidden mark me.`,
+                    `I came from a world full of evil people, but I can't blame anyone but myself: A loved 
+                    one died because of my choices, that knowledge follows me everywhere I go.`,
+                    `I owe debts to dangerous people but can't hide - I'm too recognizable and known. 
+                    I just want to start over, make a good choice for once. I am hauntingly 
+                    beautiful but marked by darkness.`,
+                    `Violence marked my early life, and stories I never share haunt me. I'm running from
+                    what I've done, and everything I touch seems to fail. Redemption drives me forward,
+                    though I trust so very few. I have a sinister and slightly disturbing air around me.`,
+                    `I grew up in a happy home. But one mistake ruined everything, and now I live with 
+                    what I've done. I smile a lot, and easily get friends ... but there is something off 
+                    about my smile.`,
+                    `The accident changed everything. It defined who I am, who I became. Yet I 
+                    push forward, trying to find new purpose. I am covered in tattoos that tell silent stories.`,
+                    `I came from a troubled background where hard choices were the only choices. I saw
+                    things that changed me forever, and that defined me, but also gave me new strength.
+                    I am missing an eye and have a limp. A small price to pay.`,
+                    `I forgot my past - or chose to forget. Maybe it's the drink. Maybe it's the scar 
+                    on the back of my head. I've started anew, but I have a feeling I've forgotten something 
+                    important. I have a strange accent.`,
+                    `I left my cozy life for adventure. I found it. Now I can no longer go back to my old
+                    life, no matter how much I'd like to.`,
+                    `I survived terrible times by betraying others, and addiction nearly claimed me.
+                    Everything I touch fails, but I keep trying to make amends. I live with my terrible
+                    choices. I wear dark clothing and have visible scars.`,
+                    `Life was too easy, so I sought to challenge myself. I succeeded! Now I can't escape 
+                    the life I've ended up in. Or the people who seek me.`,
+                    `I'm a normal person. Promise. Just don't check what's in my basement. Or behind 
+                    the fake wall. My smile is smooth like silk.`,
+                    `I'm a normal, average person. Promise. Just ignore the strange noises, the people coming and 
+                    going at odd hours, the black can parked outside. There is nothing to see here.`,
+                ],
+                lighthearted: [
+                    `I always dreamed of doing this and followed my passion, choosing joy over security.
+                    My enthusiasm drives everything I do, even though I'm behind on rent and my family
+                    doesn't understand my choices. I have an infectious smile and favor a colorful style.`,
+                    `I stumbled into this life by chance and refuse to give up on my dreams. I'm broke but
+                    happy, living paycheck to paycheck doing what I love. I embrace life as an adventure
+                    and maintain hope despite challenges. My appearance is casual and welcoming.`,
+                    `I grew up with big dreams and an adventurous spirit. Past relationship drama still
+                    affects me, but financial struggles can't kill my spirit. I find joy in simple things
+                    and spread positivity wherever I go. I have an expressive face and clothing that
+                    reflects my personality.`,
+                    `I had an adventurous spirit from the start and sought more from life. I stumbled into
+                    this situation somewhat accidentally, and setbacks are just plot twists to me. Every
+                    day is a new opportunity. I wear bright colors and have infectious energy.`,
+                    `I always wanted something meaningful and exciting. I took a chance that changed 
+                    everything, and now I juggle chaos with a smile. I believe things will work out 
+                    and wouldn't change a thing.`,
+                    `Life was too ordinary, so I chose adventure over safety. I'm dedicated to proving 
+                    everyone wrong, despite most of my schemes tend to fail.`,
+                    `I grew up with big dreams and followed my passion despite everyone's doubts. I owe
+                    money to some bad actors, but I see it as an adventure.`,
+                    `I always knew conventional life wasn't for me. I found my calling unexpectedly and
+                    decided to follow my dreams no matter the cost. I'm behind on bills but embrace each
+                    challenge with enthusiasm. I have an infectious smile.`,
+                    `I stumbled into this life and discovered I loved it. Financial struggles don't dampen
+                    my spirits as I juggle multiple projects with a smile. Every day brings new
+                    possibilities. I dress in casual, colorful style.`,
+                    `I chose joy over stability and never looked back. My family thinks I'm foolish, but
+                    I'm proving everyone wrong one day at a time. I find adventure in everything and
+                    maintain boundless optimism. My appearance is welcoming and cheerful.`,
+                    `I had big dreams from youth and took the leap despite the risks. Failed ventures
+                    taught me resilience, and I approach each day with renewed enthusiasm. I live paycheck
+                    to paycheck but wouldn't trade my work for anything. I wear my personality on my sleeve.`,
+                ]
+            },
+            fantasy: {
+                realistic: [
+                    `I came from a small village, and learned my trade from my family. I moved on to be 
+                    an apprentice in my village. War disrupted everything, and now I struggle to feed 
+                    my family in those new harsh times. I make an honest living in a dangerous world, 
+                    earning my keep by taking pride and opportunity where I can find it.`,
+                    `I grew up valuing honest work. Rivals threaten my livelihood, and I'm in debt to 
+                    a local lord. But I know my craft well and have many friends, earned through respect 
+                    and solid work. I hope that's enough.`,
+                    `I trained in my craft from a young age and know what it means to struggle. I lost my
+                    land to corrupt officials and a war I didn't understand. I try to make do, only dreaming 
+                    of modest prosperity, family and property. I just want a quiet life, but from experience, 
+                    that's one dream too many.`,
+                    `I learned practical skills for survival and came from humble beginnings. My trade is
+                    dying out, and a rival spreads lies about my work. I continue honest labor and take
+                    pride in what I do. My gear is well-used but well maintained.`,
+                    `I grew up in a small community and started at the bottom. Adventure found me
+                    unexpectedly, and I proved myself through hard work. I seek security and stability
+                    while maintaining my reputation. I have the look of a working person.`,
+                    `I learned my trade from family and came from humble beginnings. My village expects
+                    more than I can give, and I struggle with debt. I value simple rewards and continue my
+                    craft with dedication. I wear practical, sturdy clothing.`,
+                    `I was raised to value honest work and gradually became competent at my craft. War
+                    disrupted everything, but I earned respect from my community. I make an honest living
+                    despite the dangers. I dress modestly and practically.`,
+                    `I started as an apprentice and learned practical skills over time. Rival guilds make
+                    my work difficult, but I take pride in my trade. I maintain my reputation through
+                    solid work. My appearance is modest.`,
+                    `I was of low noble birth, but lost my inheritage in a petty family feud. I still dream 
+                    of the life I could have had, despite having to work with my hands now.`,
+                    `I was a soldier once, but left that life behind after a terrible betrayal. Now I work
+                    with my hands to survive, dreaming of a better life.`,
+                    `My head is full of dreams of grandeur, and I left my humble beginnings to seek my
+                    fortune in the big wide world!`,
+                ],
+                dark: [
+                    `I was touched by darkness and grew up surrounded by forbidden knowledge. A demon
+                    claimed part of my soul, and now the darkness calls to me constantly. I bear curses
+                    and forbidden knowledge, walking a path shadowed by my choices. Dark clothing and
+                    strange symbols mark me.`,
+                    `I suffered a great loss and made a terrible bargain in desperation. Everyone I love
+                    eventually dies, and I'm bound by a pact I regret. I've seen horrors and paid dark
+                    prices. A troubled aura surrounds me.`,
+                    `My past is shadowed by terrible deeds and curses. I broke an oath, and the curse
+                    follows me everywhere. I carry the weight of corruption and live with the darkness
+                    inside me. My eyes hold terrible knowledge.`,
+                    `I came from a place of loss and corruption, learning early that power has a price. I
+                    murdered someone important and betrayed my order. The price is still being paid, and
+                    redemption seems impossible. I bear visible marks of corruption.`,
+                    `I experienced terrible betrayal and witnessed forbidden things. A curse transforms me
+                    slowly, and necromancy tempts me daily. I walk a path shadowed by my choices, seeking
+                    vengeance. Strange scars hint at my past.`,
+                    `Dark deeds mark my history. I swore terrible oaths and was marked by darkness. No
+                    escape exists from what was done. I bear an unbearable burden. My eyes hold terrible
+                    knowledge.`,
+                    `I made a terrible bargain and crossed into forbidden territory. The darkness calls to
+                    me, and I've paid dark prices. I live with the corruption inside me. Dark clothing
+                    marks me.`,
+                    `I grew up surrounded by forbidden knowledge and chose a shadowed path. I betrayed my
+                    order, and everyone I love dies. I walk seeking vengeance. A troubled aura surrounds
+                    me.`,
+                    `I suffered a great loss and broke an oath. A demon claimed part of my soul, and I
+                    carry curses. Redemption seems impossible. I bear visible marks of corruption.`,
+                    `My past is shadowed by curses and terrible deeds. I'm bound by a pact I regret, and
+                    the darkness calls to me. I walk a path shadowed by my choices. Strange symbols mark
+                    my clothing.`,
+                    `I learned that power has a price and made terrible choices. I murdered someone and
+                    betrayed those who trusted me. The price is still being paid. My eyes hold terrible
+                    knowledge.`,
+                    `My head was full of dreams of grandeur, and I sought power at any cost. Now I am 
+                    hunted by debt collectors from bad decisions I made in my pursuit of wealth.`,
+                    `I was a soldier in a war, but deserted after a terrible loss. Now I am on the run from
+                    the authorities, trying to make a new life with the skills I have.`,
+                    `I always dreamed of a life of adventure and glory, but I made some bad turns along they
+                    way and now find myself on the wrong side of the law.`,
+                ],
+                lighthearted: [
+                    `I grew up believing in magic and destiny, always dreaming of adventure. I finally got
+                    the chance to live my dream, though accidents follow me everywhere and I owe money to
+                    half the kingdom. I'm a cheerful soul at heart who embraces life's adventures. I dress
+                    in bright, cheerful colors.`,
+                    `I was raised on tales of heroes and came from a family of dreamers. My magic goes
+                    hilariously wrong, and I got kicked out of wizard school. Optimism defines my outlook,
+                    and I believe things will work out. I carry odd trinkets and mementos.`,
+                    `I never fit into ordinary life and always dreamed of adventure. I keep getting into
+                    amusing trouble, and my family thinks I'm foolish. Wonder drives my journey, and I
+                    spread joy wherever I go. My equipment is as quirky as my personality.`,
+                    `I was blessed with natural optimism and grew up on stories of heroes. I'm terrible at
+                    my chosen profession but discovered wonder was real. Every day brings new wonders. I
+                    have an expressive, animated face.`,
+                    `I had a gift for finding joy and believed in magic from youth. I'm running from an
+                    arranged marriage and keep getting into trouble. I make friends wherever I go and
+                    embrace the magical. I favor whimsical accessories.`,
+                    `I grew up believing in destiny and always dreamed of adventure. I finally answered
+                    destiny's call, though I'm naive and learning. I live like in the stories. I dress in
+                    bright colors.`,
+                    `I was raised on tales of heroes and had a gift for finding joy. My magic goes wrong
+                    often, but I found I had a special gift. I spread joy on my journey. I carry odd
+                    trinkets.`,
+                    `I came from a family of dreamers and never fit into ordinary life. I owe money to
+                    half the kingdom but took the leap into adventure. Every day brings new wonders. My
+                    equipment is quirky.`,
+                    `I believed in magic from youth and always dreamed of adventure. I got kicked out of
+                    wizard school but discovered wonder was real. I embrace life's adventures. I have an
+                    expressive face.`,
+                    `I grew up on stories of heroes and was blessed with natural optimism. Accidents
+                    follow me, but I answered destiny's call. I make friends wherever I go. I favor
+                    whimsical accessories.`,
+                    `I always dreamed of adventure and came from a family of dreamers. I'm terrible at my
+                    chosen profession but found I had a special gift. I believe things will work out. I
+                    dress in cheerful colors.`,
+                    `All I ever wanted was to make people laugh, with my wit and charm. Somehow I ended up
+                    owing a lot of money to some very dangerous people. But hey, at least I can still
+                    make them laugh, right?`
+                ]
+            },
+            scifi: {
+                realistic: [
+                    `I grew up on stations and ships, training for this work from youth. Corporate
+                    cutbacks threaten my job, and my ship is falling apart. I make my living in the black,
+                    handling responsibilities professionally despite the challenges. I wear practical
+                    spacer gear.`,
+                    `I logged many hours in space and came up through the ranks. I'm behind on maintenance
+                    fees, and station bureaucracy makes work impossible. Experience has made me capable,
+                    and years of work show in my expertise.`, 
+                    `I learned my trade in the black and built my career one job at a time. My
+                    certification is about to expire, and union disputes affect my pay. I deal with the
+                    realities of space travel with professionalism. I keep my equipment well-maintained.`,
+                    `I came from a spacefaring family and chose this path for practical reasons. I'm one
+                    accident from unemployment, and insurance companies don't trust me anymore. Still, 
+                    I have a reputation in the right circles to fall back on.`,
+                    `I have a lot of expectations on my shoulders. I my first corporate certification 
+                    at an elite school. Problem is that I'm not good at this, and want another life.`, 
+                    `I pursued this career deliberately and proved myself. The pay is decent,
+                    and work is steady, though challenges I face could be deadly.`,
+                    `I grew up planet-side and built my career one job at a time. Corporate cutbacks
+                    threaten my livelihood, but I handle my responsibilities professionally. Years of work
+                    show in my expertise. I have a family.`,
+                    `I came up through the ranks and learned my trade the hard way. Station bureaucracy
+                    complicates things, but I've found my niche in space. Professionalism defines my
+                    career. I keep my equipment maintained.`,
+                    `I came from a spacefaring family and trained for this work from youth. Equipment
+                    failures follow me around, it's as if I'm cursed. Yet, space is home and I have 
+                    many friends.`,
+                    `I chose this path to survive. Over the years, I have gotten experienced and ruggerd. 
+                    Work is steady, even though the work can be dangerous. I wear flashy spacer gear.`,
+                    `Ever since I was a kid, I always wanted to entertain people. I ended up travelling
+                    far and wide to do so. I'm not very good at managing my finances, though, and now I owe
+                    a lot of money to some very dangerous people.`,
+                ], dark: [ `I grew up where violence was survival and learned early that morality is a luxury. I
+                    left my crew to die, and now corporate kill squads hunt me. Visible cybernetics mark me.`,
+                    `I came from the kind of place no one escapes without making dark choices. My
+                    augmentations are killing me slowly, and I wonder if any of the others got out 
+                    in time.`,
+                    `I was a leader, but now the war crimes follow me everywhere, and I'm addicted to 
+                    combat stims. I move around a lot, to avoud my pursuers. Scars tell my stories.`,
+                    `My past is full of things I can't undo. A crime syndicate owns me, and I murdered my
+                    way out of debt. I live with the consequences daily. I carry concealed weapons.`,
+                    `Illegal activities shaped me, and I witnessed something terrible. Those I thought 
+                    were my family kicked me out, but I took something from them as I left. 
+                    Illegal tech augments me.`,
+                    `Violence was survival in my past. I left my crew to die and took augmentations for
+                    dark purposes. I'm trying to escape that legacy. Visible cybernetics mark me.`,
+                    `I always wanted to be a hero, but instead I ended up on the wrong side of the law. 
+                    Now I try to make the best of a bad situation, hoping to find a way out of the 
+                    crippling debt I've gotten myself into.`,
+                ],
+                lighthearted: [
+                    `I always dreamed of exploring the cosmos and grew up reading about space adventures.
+                    I crash-landed on three planets this year, and debt collectors find me surprisingly
+                    often. I'm an enthusiastic spacer who loves exploring despite the chaos. I wear
+                    colorful patches on my gear.`,
+                    `I came from a family of optimists and believed the stars held endless possibilities.
+                    I keep getting fired for optimism, and my ship barely holds together. I see adventure
+                    everywhere and maintain optimism despite the void. I customize my equipment.`,
+                    `I never let reality dampen my dreams and grew up fascinated by space. I'm banned from
+                    two systems, and navigation isn't my strong suit. Wonder keeps me going, and I make
+                    connections everywhere. My clothing choices are bright and cheerful.`,
+                    `I had an explorer's spirit and always dreamed of exploring the stars. I owe money
+                    across the galaxy, and accidents follow my wake. I believe in the goodness of others.
+                    I collect mementos from my travels.`,
+                    `Space called to me from youth. I'm too trusting for space, but I finally made it to
+                    the stars. Every port and species excites me. My gear reflects my personality.`,
+                    `I always dreamed of exploring the cosmos. I crash-landed multiple times, but I
+                    discovered the joy of exploration. I maintain optimism despite the void. I wear
+                    colorful patches.`,
+                    `I grew up reading about space adventures. I keep getting fired for optimism, but I
+                    found my calling among the stars. I make connections everywhere. I customize my
+                    equipment.`,
+                    `I came from a family of optimists. I'm banned from two systems, but I embraced the
+                    spacefaring life. My enthusiasm is infectious. My clothing is bright and cheerful.`,
+                    `I believed the stars held endless possibilities. Navigation isn't my strong suit, but
+                    I took that first leap into the void. Every port excites me. I collect mementos.`,
+                    `I grew up fascinated by space. I owe money across the galaxy, but I love exploring
+                    the cosmos. Wonder keeps me going. My gear reflects my personality.`,
+                    `I always dreamed of exploring the stars. Accidents follow my wake, but I see
+                    adventure everywhere. I maintain optimism. I wear colorful patches.`
+                ]
+            },
+            horror: {
+                realistic: [
+                    `I was ordinary until I witnessed things that defy explanation. Nobody believes my
+                    findings, and the stress is destroying my relationships. I investigate the unexplained
+                    and document what others refuse to see. I dress practically and carry tools for
+                    protection.`,
+                    `I started investigating the unexplained after a personal experience I couldn't
+                    ignore. I'm running out of money for research, and my reputation is ruined. Experience
+                    has taught me vigilance. I wear simple, functional clothing.`,
+                    `I survived an encounter that changed me, coming from a rational background. I can't
+                    sleep anymore, and the evidence keeps disappearing. Still, I try to face the 
+                    impossible with reason, it's all I have left.` ,
+                    `I learned the world is stranger than it seems after stumbling into the supernatural
+                    world by accident. I'm losing my grip on reality, and many think I'm
+                    delusional. I document everything - I keep detailed notes on my person.`,
+                    `I had a personal experience that couldn't be ignored. I decided to face it
+                    methodically, though nobody believes my findings. I approach the impossible with
+                    rigor. I carry tools for protection.`,
+                    `I was ordinary until the accident. Now I can't sleep, and I'm running out of money
+                    for those special pills. I keep detailed notes.`,
+                    `I own a small general store. I've met all sorts of folks, some stranger than others.
+                    People talk to me, tell me things. Sometimes things I'd rather not know.`,
+                ],
+                dark: [
+                    `I fed her to the thing, and now something else speaks through me sometimes. 
+                    I live on the street. Strange scars mark me.`,
+                    `I grew up knowing things humans shouldn't know. I'm slowly becoming a monster, and
+                    something is growing inside me. Horror has transformed me, and I'm convinced I'm no 
+                    longer entirely human. I'm sure of it, but no one believes me.`,
+                    `I was changed by something incomprehensible. I made a deal I can't break, and
+                    something is growing inside me. I exist between two worlds. An aura of wrongness
+                    surrounds me.`,
+                    `My life was happy until the accident. Then things took a wrong turn. Something 
+                    changed in my head, made me irritable and strange. I hear whispers, and they 
+                    tell me things. I don't listen. Usually.`,
+                    `I used to be a colonel, but I was too proud and honest - and lost my position. Now 
+                    I can't find work anywhere. I owe money to some terrible people, and they are after me.`,
+                    `I lost so much as a kid, and swore I would one day find out the truth. Now, I 
+                    chase shadows and nightmares, trying to make sense of the horrors I've seen.`,
+                    `I am an entertainer that specializes in the macabre. But my manager scammed me 
+                    and now I'm a has-been, having to earn my way through small-time gigs and day jobs.`,
+                ],
+                lighthearted: [
+                    `I always believed in the supernatural and grew up fascinated by the unexplained. I
+                    keep accidentally summoning things, and ghosts find me annoyingly chatty. I'm an
+                    enthusiastic supernatural investigator who approaches horror with unexpected cheer. I
+                    dress practically but with personal flair.`,
+                    `I stumbled into this world by accident and had an unusual gift from birth. I'm
+                    terrible at exorcisms, and my YouTube channel is failing. I maintain humor despite the
+                    darkness. I collect odd trinkets.`,
+                    `I was drawn to mysteries others feared and grew up on ghost stories. Equipment breaks
+                    around me constantly, and I mistake serious threats for pranks. Wonder and fear
+                    balance in me. My appearance is surprisingly cheerful.`,
+                    `I saw my first ghost and got hooked, drawn to the paranormal. My enthusiasm scares
+                    away phenomena, and I owe money for paranormal equipment. I refuse to let terror
+                    dampen my spirits. I favor practical but unique clothing.`,
+                    `I felt the otherworld calling from youth. Spirits avoid me out of embarrassment, but
+                    I finally got the chance to prove it. I treat every encounter as exciting. I have a
+                    disarmingly friendly look.`,
+                    `I always believed in the supernatural. I keep accidentally summoning things, but I
+                    fell into this life through absurd coincidences. I help others with enthusiasm. I
+                    dress practically with personal flair.`,
+                    `I grew up fascinated by the unexplained. Ghosts find me annoyingly chatty, but I
+                    discovered I could help others. I find joy in the strange. I collect odd trinkets.`,
+                    `I stumbled into this world by accident. I'm terrible at exorcisms, but I embraced my
+                    gift. Wonder and terror both thrill me. My appearance is surprisingly cheerful.`,
+                    `I was drawn to mysteries others feared. Equipment breaks around me, but I decided to
+                    face horror with humor. I maintain optimism despite darkness. I favor practical but
+                    unique clothing.`,
+                    `I saw my first ghost and got hooked. Spirits avoid me, but I finally got the chance
+                    to prove it. I approach horror with unexpected cheer. I have a disarmingly friendly
+                    look.`,
+                    `I had an unusual gift from birth. My enthusiasm scares away phenomena, but I fell
+                    into this life through absurd coincidences. I treat every encounter as exciting. I
+                    dress practically with flair.`
+                ]
+            }
+        };
+
+        // Utility function to get random element from array
+        function randomElement(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        // Utility function to shuffle array
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Update the magical approach label based on genre
+        function updateMagicalLabel() {
+            const genre = document.getElementById('genre').value;
+            const label = document.getElementById('magicalLabel');
+
+            if (genre === 'scifi') {
+                label.textContent = 'Include Mental Approach';
+            } else if (genre === 'horror' || genre === 'modern') {
+                label.textContent = 'Include Occult Approach';
+            } else {
+                label.textContent = 'Include Magical Approach';
+            }
+        }
+
+        // Generate a character name based on genre
+        function generateName(genre) {
+            const nameSet = NAMES[genre];
+            const firstName = randomElement(nameSet.first);
+            const lastName = randomElement(nameSet.last);
+            return `${firstName} ${lastName}`;
+        }
+
+        // Generate a character concept/blurb
+        function generateBlurb(genre, tone) {
+            const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+            return `${capitalize(randomElement(CONCEPTS[genre][tone]))}`;
+        }
+
+        // Generate character details (including backstory)
+        function generateDetails(genre, tone) {
+            const detailBlocks = CHARACTER_DETAILS[genre][tone];
+            return randomElement(detailBlocks);
+        }
+
+        // Generate approaches (including magical if selected, leaving one undefined if selected)
+        function generateApproaches(genre, tone, includeMagical, leaveUndefined) {
+            const totalApproaches = leaveUndefined ? 4 : 5;
+            const allApproaches = [
+                ...APPROACHES.physical,
+                ...APPROACHES.mental,
+                ...APPROACHES.social
+            ];
+
+            let selectedApproaches;
+
+            if (includeMagical) {
+                selectedApproaches = shuffleArray(allApproaches).slice(0, totalApproaches - 1);
+                const magicalApproach = MAGICAL_APPROACHES[genre][tone];
+                selectedApproaches.push(magicalApproach);
+            } else {
+                selectedApproaches = shuffleArray(allApproaches).slice(0, totalApproaches);
+            }
+
+            // Generate full approach text with explanations
+            return selectedApproaches.map(approach => {
+                const explanations = APPROACH_EXPLANATIONS[genre][approach];
+                const explanation = randomElement(explanations);
+                return `${approach}, because ${explanation}`;
+            });
+        }
+
+        // Current character state for inline editing
+        let currentCharacter = null;
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function parseMarkdown(text) {
+            let s = escapeHtml(text);
+            s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            s = s.replace(/\*(.+?)\*/g, '<em>$1</em>');
+            return s;
+        }
+
+        function renderApproach(text) {
+            const commaIdx = text.indexOf(',');
+            if (commaIdx === -1) return parseMarkdown(text);
+            const name = text.substring(0, commaIdx);
+            const rest = text.substring(commaIdx + 1);
+            return '<strong>' + escapeHtml(name) + '</strong>,' + parseMarkdown(rest);
+        }
+
+        function startEdit(fieldName, index) {
+            const isApproach = fieldName === 'approaches';
+            const isDetails = fieldName === 'details';
+            const container = isApproach
+                ? document.querySelector(`[data-approach-index="${index}"] .approach-text`)
+                : document.querySelector(`[data-field="${fieldName}"] .field-text`);
+            if (!container) return;
+            // Already editing — let the input handle clicks normally
+            if (container.querySelector('.inline-edit-input, .inline-edit-textarea')) return;
+            const rawValue = isApproach ? currentCharacter.approaches[index] : currentCharacter[fieldName];
+            const editIcon = isApproach
+                ? document.querySelector(`[data-approach-index="${index}"] .edit-icon`)
+                : document.querySelector(`[data-field="${fieldName}"] .edit-icon`);
+            if (editIcon) editIcon.style.display = 'none';
+
+            if (isDetails) {
+                const textarea = document.createElement('textarea');
+                textarea.className = 'inline-edit-textarea';
+                textarea.value = rawValue;
+                textarea.addEventListener('blur', () => saveEdit(fieldName, textarea.value));
+                textarea.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') { e.preventDefault(); cancelEdit(fieldName); }
+                });
+                container.innerHTML = '';
+                container.appendChild(textarea);
+                textarea.focus();
+            } else {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'inline-edit-input';
+                input.value = rawValue;
+                input.addEventListener('blur', () => saveEdit(fieldName, input.value, index));
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+                    if (e.key === 'Escape') { e.preventDefault(); cancelEdit(fieldName, index); }
+                });
+                container.innerHTML = '';
+                container.appendChild(input);
+                input.focus();
+            }
+        }
+
+        function saveEdit(fieldName, newValue, index) {
+            if (fieldName === 'approaches') {
+                currentCharacter.approaches[index] = newValue;
+            } else {
+                currentCharacter[fieldName] = newValue;
+            }
+            rerenderField(fieldName, index);
+        }
+
+        function cancelEdit(fieldName, index) {
+            rerenderField(fieldName, index);
+        }
+
+        function rerenderField(fieldName, index) {
+            const isApproach = fieldName === 'approaches';
+            const container = isApproach
+                ? document.querySelector(`[data-approach-index="${index}"] .approach-text`)
+                : document.querySelector(`[data-field="${fieldName}"] .field-text`);
+            const editIcon = isApproach
+                ? document.querySelector(`[data-approach-index="${index}"] .edit-icon`)
+                : document.querySelector(`[data-field="${fieldName}"] .edit-icon`);
+            if (!container) return;
+
+            if (isApproach) {
+                container.innerHTML = renderApproach(currentCharacter.approaches[index]);
+            } else {
+                container.innerHTML = parseMarkdown(currentCharacter[fieldName]);
+            }
+            if (editIcon) editIcon.style.display = '';
+        }
+
+        // Generate a single random approach text for the current genre/tone
+        function generateRandomApproach() {
+            const genre = document.getElementById('genre').value;
+            const tone = document.getElementById('tone').value;
+            const allApproaches = [
+                ...APPROACHES.physical,
+                ...APPROACHES.mental,
+                ...APPROACHES.social
+            ];
+            // Avoid duplicating approaches already on the character
+            const usedNames = currentCharacter.approaches.map(a => a.split(',')[0].trim());
+            const available = allApproaches.filter(a => !usedNames.includes(a));
+            const approach = randomElement(available.length > 0 ? available : allApproaches);
+            const explanations = APPROACH_EXPLANATIONS[genre][approach];
+            const explanation = randomElement(explanations);
+            return `${approach}, because ${explanation}`;
+        }
+
+        // Re-render only the approaches list in the DOM
+        function rerenderApproaches() {
+            const list = document.querySelector('.approaches-list');
+            if (!list) return;
+            const emptyApproachSlots = Array(3).fill(0).map(() =>
+                '<li class="empty-line"></li>'
+            ).join('');
+            list.innerHTML = currentCharacter.approaches.map((approach, i) => {
+                return `<li class="approach-item" data-approach-index="${i}"><span class="approach-text" onclick="startEdit('approaches', ${i})">${renderApproach(approach)}</span><button class="edit-icon" onclick="startEdit('approaches', ${i})" title="Edit approach">&#9998;</button></li>`;
+            }).join('') + emptyApproachSlots;
+        }
+
+        // Toggle magical/occult approach on the current character
+        function toggleMagical() {
+            if (!currentCharacter) { generateCharacter(); return; }
+            const genre = document.getElementById('genre').value;
+            const tone = document.getElementById('tone').value;
+            const includeMagical = document.getElementById('magical').checked;
+            const leaveUndefined = document.getElementById('leaveUndefined').checked;
+
+            if (includeMagical) {
+                // Replace the last regular approach with the magical one
+                const magicalApproach = MAGICAL_APPROACHES[genre][tone];
+                const explanations = APPROACH_EXPLANATIONS[genre][magicalApproach];
+                const explanation = randomElement(explanations);
+                const magicalText = `${magicalApproach}, because ${explanation}`;
+                currentCharacter.approaches[currentCharacter.approaches.length - 1] = magicalText;
+            } else {
+                // Replace the magical approach (last one) with a random regular approach
+                currentCharacter.approaches[currentCharacter.approaches.length - 1] = generateRandomApproach();
+            }
+            rerenderApproaches();
+        }
+
+        // Toggle leaving one approach undefined on the current character
+        function toggleLeaveUndefined() {
+            if (!currentCharacter) { generateCharacter(); return; }
+            const leaveUndefined = document.getElementById('leaveUndefined').checked;
+            const includeMagical = document.getElementById('magical').checked;
+
+            if (leaveUndefined) {
+                // Remove one approach: second-to-last if magical is checked (last is magical), otherwise last
+                if (includeMagical && currentCharacter.approaches.length >= 2) {
+                    currentCharacter.approaches.splice(currentCharacter.approaches.length - 2, 1);
+                } else {
+                    currentCharacter.approaches.pop();
+                }
+            } else {
+                // Re-add a random approach at the position we removed from
+                const newApproach = generateRandomApproach();
+                if (includeMagical && currentCharacter.approaches.length >= 1) {
+                    // Insert before the magical approach (last one)
+                    currentCharacter.approaches.splice(currentCharacter.approaches.length - 1, 0, newApproach);
+                } else {
+                    currentCharacter.approaches.push(newApproach);
+                }
+            }
+            rerenderApproaches();
+        }
+
+        // Main character generation function
+        function generateCharacter() {
+            const genre = document.getElementById('genre').value;
+            const tone = document.getElementById('tone').value;
+            const includeMagical = document.getElementById('magical').checked;
+            const leaveUndefined = document.getElementById('leaveUndefined').checked;
+
+            const character = {
+                name: generateName(genre),
+                blurb: generateBlurb(genre, tone),
+                details: generateDetails(genre, tone),
+                approaches: generateApproaches(genre, tone, includeMagical, leaveUndefined),
+                luck: 1
+            };
+
+            currentCharacter = character;
+            displayCharacter(character);
+        }
+
+        // Display the character sheet
+        function displayCharacter(character) {
+            // Generate empty approach slots
+            const emptyApproachSlots = Array(3).fill(0).map(() =>
+                '<li class="empty-line"></li>'
+            ).join('');
+
+            // Generate empty consequence slots
+            const emptyConsequenceSlots = Array(3).fill(0).map(() =>
+                '<div class="empty-line"></div>'
+            ).join('');
+
+            // Generate empty bonus slots
+            const emptyBonusSlots = Array(3).fill(0).map(() =>
+                '<div class="empty-line"></div>'
+            ).join('');
+
+            // Generate empty detail lines
+            const emptyDetailLines = Array(3).fill(0).map(() =>
+                '<div class="empty-line"></div>'
+            ).join('');
+
+            const sheetHTML = `
+                <div class="watermark watermark-top">PLOT ARMOR</div>
+
+                <div class="character-header">
+                    <div class="character-name-concept">
+                        <div class="character-name" data-field="name"><span class="field-text" onclick="startEdit('name')">${parseMarkdown(character.name)}</span><button class="edit-icon" onclick="startEdit('name')" title="Edit name">&#9998;</button></div>
+                        <div class="character-blurb" data-field="blurb"><span class="field-text" onclick="startEdit('blurb')">${parseMarkdown(character.blurb)}</span><button class="edit-icon" onclick="startEdit('blurb')" title="Edit blurb">&#9998;</button></div>
+                    </div>
+                    <div class="character-meta">
+                        <div class="player-field">
+                            <div style="font-weight: bold; font-size: 0.85em;">PLAYER</div>
+                            <div style="border-bottom: 1px solid #333; padding: 5px 0; min-width: 120px;"></div>
+                        </div>
+                        <div class="luck-counter">LUCK: <span class="luck-value"></span></div>
+                    </div>
+                </div>
+
+                <div class="sheet-section character-details-section">
+                    <h2>Character Details</h2>
+                    <p class="details-text" data-field="details"><span class="field-text" onclick="startEdit('details')">${parseMarkdown(character.details)}</span><button class="edit-icon" onclick="startEdit('details')" title="Edit details">&#9998;</button></p>
+                    <div class="slot-list">
+                        ${emptyDetailLines}
+                    </div>
+                </div>
+
+                <div class="sheet-section" id="approachesSection">
+                    <h2>Approaches <span class="format-hint">&lt;approach&gt;, because &lt;reason&gt;</span></h2>
+                    <ul class="approaches-list">
+                        ${character.approaches.map((approach, i) => {
+                            return `<li class="approach-item" data-approach-index="${i}"><span class="approach-text" onclick="startEdit('approaches', ${i})">${renderApproach(approach)}</span><button class="edit-icon" onclick="startEdit('approaches', ${i})" title="Edit approach">&#9998;</button></li>`;
+                        }).join('')}
+                        ${emptyApproachSlots}
+                    </ul>
+                </div>
+
+                <div class="sheet-section">
+                    <h2>Narrow Situational Bonuses <span class="format-hint">+1d6 when &lt;situation&gt;, because &lt;reason&gt;</span></h2>
+                    <div class="slot-list">
+                        ${emptyBonusSlots}
+                    </div>
+                </div>
+
+                <div class="sheet-section">
+                    <h2>Active Consequences <span class="format-hint">When resolved: 1 Luck + 1 extra Luck, Character detail, New/modified Approach, or a Narrow situational bonus</span></h2>
+                    <div class="slot-list">
+                        ${emptyConsequenceSlots}
+                    </div>
+                </div>
+
+                <div class="watermark">PLOT ARMOR</div>
+            `;
+
+            document.getElementById('characterSheet').innerHTML = sheetHTML;
+        }
+
+        // Print character sheet
+        function printCharacter() {
+            if (document.activeElement && (document.activeElement.classList.contains('inline-edit-input') || document.activeElement.classList.contains('inline-edit-textarea'))) document.activeElement.blur();
+            const element = document.getElementById('characterSheet');
+            element.classList.add('export-mode');
+            const opt = {
+                margin: 0.5,
+                filename: 'character-sheet.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Generate PDF as blob and open in new window for printing
+            html2pdf().set(opt).from(element).toCanvas()
+                .then(function() { element.classList.remove('export-mode'); })
+                .toPdf().outputPdf('blob')
+                .then(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const printWindow = window.open(url, '_blank');
+                    if (printWindow) {
+                        printWindow.onload = function() {
+                            printWindow.print();
+                        };
+                    }
+                });
+        }
+
+        // Export character sheet to PDF
+        function exportToPDF() {
+            if (document.activeElement && (document.activeElement.classList.contains('inline-edit-input') || document.activeElement.classList.contains('inline-edit-textarea'))) document.activeElement.blur();
+            const element = document.getElementById('characterSheet');
+            element.classList.add('export-mode');
+            const nameEl = element.querySelector('.character-name .field-text');
+            const nameParts = nameEl ? nameEl.textContent.trim().split(/\s+/) : [];
+            const filename = nameParts.length >= 2
+                ? nameParts[0] + '_' + nameParts[1] + '_plotarmor.pdf'
+                : 'character-sheet.pdf';
+            const opt = {
+                margin: 0.5,
+                filename: filename,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).toCanvas()
+                .then(function() { element.classList.remove('export-mode'); })
+                .toPdf().save();
+        }
+
+        // Apply export-mode for browser Ctrl+P printing
+        window.addEventListener('beforeprint', function() {
+            var sheet = document.getElementById('characterSheet');
+            if (sheet) sheet.classList.add('export-mode');
+        });
+        window.addEventListener('afterprint', function() {
+            var sheet = document.getElementById('characterSheet');
+            if (sheet) sheet.classList.remove('export-mode');
+        });
+
+        // Generate initial character when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            updateMagicalLabel();
+            generateCharacter();
+        });
+    </script>
+</body>
+</html>
