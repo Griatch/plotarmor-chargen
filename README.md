@@ -7,6 +7,7 @@ HTML page, making it easy to embed.
 > If you have good ideas on random backgrounds/blurbs strings to add, make an issue, 
 and I'll review and add them!
 
+You can find this generator [deployed online here][generator]!
 
 ## Functionality
 
@@ -26,3 +27,4 @@ This is built as a single-file JavaScript application,
 embedded in an HTML file, for easily sharing and embedding in other pages.
 
 [plotarmor]: https://griatch.itch.io/plot-armor-rpg
+[generator]: https://sites.google.com/view/plot-armor-character-generator/home
