@@ -4,8 +4,8 @@ This repository contains a full character generation system for
 the [Plot Armor][plotarmor] roleplaying game. It's distributed as a single
 HTML page, making it easy to embed.
 
-> If you have good ideas on random backgrounds/blurbs strings to add, [make an issue](https://github.com/Griatch/plotarmor-chargen/issues/new),
-and I'll review and add them!
+> If you find bugs, or have good ideas on random backgrounds/blurbs strings,
+> [make an issue][newissue] or PR -  I'll review and add them!
 
 You can find this generator [deployed online here][generator]!
 
@@ -27,4 +27,5 @@ This is built as a single-file JavaScript application,
 embedded in an HTML file, for easily sharing and embedding in other pages.
 
 [plotarmor]: https://griatch.itch.io/plot-armor-rpg
-[generator]: https://sites.google.com/view/plot-armor-character-generator/home
+[generator]: https://griatch.github.io/plotarmor-chargen
+[newissue]: https://github.com/Griatch/plotarmor-chargen/issues/new
