@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plot Armor Character Generator</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             /* Set to 0-1 to make the character sheet background transparent.
@@ -22,8 +24,8 @@
 
         body {
             font-family: 'Alegreya', serif;
-            background: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)),
-                        url('images/CastleGreenriver.jpg') no-repeat center center fixed;
+            background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
+                url('images/CastleGreenriver.jpg') no-repeat center center fixed;
             background-size: cover;
             min-height: 100vh;
             padding: 20px;
@@ -519,6 +521,7 @@
             opacity: 0.5;
             transition: opacity 0.2s, color 0.2s;
         }
+
         .edit-icon:hover {
             color: #333;
             opacity: 1;
@@ -548,6 +551,7 @@
             width: 100%;
             box-sizing: border-box;
         }
+
         .inline-edit-textarea {
             min-height: 4em;
             resize: vertical;
@@ -638,7 +642,8 @@
                 margin: 0;
             }
 
-            .header, .controls {
+            .header,
+            .controls {
                 display: none;
             }
 
@@ -661,12 +666,15 @@
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
             <h1>Plot Armor Character Generator</h1>
-            <p>Create unique characters for your <a href="https://griatch.itch.io/plot-armor-rpg">Plot Armor RPG</a> adventures</p>
-            <p>Report bugs and make suggestions at <a href="https://github.com/Griatch/plotarmor-chargen">github.com/Griatch/plotarmor-chargen</a></p>
+            <p>Create unique characters for your <a href="https://griatch.itch.io/plot-armor-rpg">Plot Armor RPG</a>
+                adventures</p>
+            <p>Report bugs and make suggestions at <a
+                    href="https://github.com/Griatch/plotarmor-chargen">github.com/Griatch/plotarmor-chargen</a></p>
         </div>
 
         <div class="controls">
@@ -785,22 +793,22 @@
                     'Anderson', 'Taylor', 'Brown', 'Wilson', 'Davis', 'Moore', 'Garcia', 'Gertz',
                     'Henderson', 'Lopez', 'Nguyen', 'Clark', 'Lewis', 'Walker', 'Hall', 'Allen', 'Young',
                     'Wright', 'King', 'Scott', 'Torres', 'Ng', 'Singh', 'Khan', 'Das', 'Iyer', 'Reddy',
-                    'Okoro', 'Mensah', 'Diallo', 'Bakari', 'Jabari', 'Kamau', 'Nkrumah', 'Khumalo', 
+                    'Okoro', 'Mensah', 'Diallo', 'Bakari', 'Jabari', 'Kamau', 'Nkrumah', 'Khumalo',
                     'Asante', 'Diallo', 'Conteh', 'Adisa', 'Amadi', 'Chiamaka', 'Enzi', 'Juma', 'Ezeji',
-                    'Chen', 'Li', 'Wang', 'Zhao', 'Liu', 'Zhang', 'Yang', 'Huang', 'Wu', 'Xu', 
+                    'Chen', 'Li', 'Wang', 'Zhao', 'Liu', 'Zhang', 'Yang', 'Huang', 'Wu', 'Xu',
                     'Sun', 'Ma', 'Zhu', '', '', '', '', '', '', '', '', ''
                 ]
             },
             fantasy: {
                 first: [
                     'Aldric', 'Brynn', 'Cedric', 'Elara', 'Finn', 'Gwendolyn', 'Theron', 'Lyra',
-                    'Rowan', 'Aria', 'Dorian', 'Seren', 'Kael', 'Isolde', 'Magnus', 'Selene', 
+                    'Rowan', 'Aria', 'Dorian', 'Seren', 'Kael', 'Isolde', 'Magnus', 'Selene',
                     'Thalia', 'Eamsa', 'Varek', 'Raraka', 'Zorin', 'Ade', 'Borin', 'Calia', 'Dara', 'Eira',
                     'Thorand', 'Liora', 'Mira', 'Nerys', 'Orin', 'Pyria',
-                    'Quillan', 'Riven', 'Sylas', 'Talia', 'Ulric', 'Vaelin', ],
+                    'Quillan', 'Riven', 'Sylas', 'Talia', 'Ulric', 'Vaelin',],
                 last: [
                     'Stormwind', 'Ironforge', 'Shadowmere', 'Brightblade', 'Moonwhisper', 'Dragonheart',
-                    'Forneshield', 'Starweaver', 'Thornwood', 'Silverleaf', 'Flamecaller', 'Frostborn', 
+                    'Forneshield', 'Starweaver', 'Thornwood', 'Silverleaf', 'Flamecaller', 'Frostborn',
                     'Rajin', 'Alwyn', 'Danforth', 'Blackwood', 'Embion', 'Galathil', 'Hawkridge', 'Irongale',
                     'Jorund', 'Kethril', 'Larethian', 'Mithrandir', 'Nimrodel', 'Oakenheel', 'Pyrelight',
                     'Quenoth', 'Ravencrest', 'Sunstrider', 'Tarnhelm', 'Umbermoor', 'Valefor',
@@ -819,7 +827,7 @@
                 ],
                 last: [
                     'Voss', 'Kane', 'Reeves', 'Sterling', 'Cross', 'Hawk', 'Phoenix', 'Striker',
-                    'Drake', 'Storm', 'Cortez', 'Blackwell', 'Astrid', 'Quantum', 
+                    'Drake', 'Storm', 'Cortez', 'Blackwell', 'Astrid', 'Quantum',
                     'Corbett', 'Thorne', 'Stone', 'Rivers', 'Barlow', 'Grimm', 'Mercer', 'Hollis',
                     'Blake', 'Webb', 'Aldrich', 'Sterling', 'Pemberton', 'Caine', 'Thornhill', 'Pendleton',
                     'SID06', 'Orcha', 'Zypher', 'Karalin', 'Vortan', 'Xelara', 'Draxon', 'Lunaris',
@@ -844,11 +852,11 @@
                     'Corbett', 'Thorne', 'Stone', 'Rivers', 'Barlow', 'Grimm', 'Mercer', 'Hollis',
                     'Blake', 'Webb', 'Aldrich', 'Sterling', 'Pemberton', 'Caine', 'Thornhill', 'Pendleton',
                     'Amara', 'Jabari', 'Kofinne', 'Malaika', 'Nia', 'Zuri',
-                    'Whitmore', 'Ramsey', 'Collier', 'Dunwich', 
+                    'Whitmore', 'Ramsey', 'Collier', 'Dunwich',
                     'Wright', 'King', 'Scott', 'Torres', 'Ng', 'Singh', 'Khan', 'Das', 'Iyer', 'Reddy',
-                    'Okoro', 'Mensah', 'Diallo', 'Bakari', 'Jabari', 'Kamau', 'Nkrumah', 'Khumalo', 
+                    'Okoro', 'Mensah', 'Diallo', 'Bakari', 'Jabari', 'Kamau', 'Nkrumah', 'Khumalo',
                     'Asante', 'Diallo', 'Conteh', 'Adisa', 'Amadi', 'Chiamaka', 'Enzi', 'Juma', 'Ezeji',
-                    'Chen', 'Li', 'Wang', 'Zhao', 'Liu', 'Zhang', 'Yang', 'Huang', 'Wu', 'Xu', 
+                    'Chen', 'Li', 'Wang', 'Zhao', 'Liu', 'Zhang', 'Yang', 'Huang', 'Wu', 'Xu',
                     'Sun', 'Ma', 'Zhu', '', '', ''
                 ]
             }
@@ -907,7 +915,7 @@
                     'old librarian preserving forgotten knowledge',
                     'working in a convenience store',
                     'owns a small convenience store',
-                    'CEO with a rough home life', 
+                    'CEO with a rough home life',
                     'surgeon best in their field',
                 ],
                 dark: [
@@ -947,7 +955,7 @@
                     'the one who dies first',
                     'working in a convenience store',
                     'owns a small convenience store',
-                    'CEO with a rough home life', 
+                    'CEO with a rough home life',
                     'defined by their loss',
                     'defined by their trauma',
                     'defined by their lost love',
@@ -1060,6 +1068,8 @@
                     'wicked witch with a heart of gold',
                     'talkative parrot familiar',
                     'healer that heals more than intended',
+                    'wizard with a big debt',
+                    'wizard with a gambling problem',
                 ]
             },
             scifi: {
@@ -1218,6 +1228,9 @@
                     'ghost tour guide with a flair for the dramatic',
                     'ghost-buster-in-training',
                     'field medic who you don\'t want to treat you',
+                    'fraudster claiming to be a psychic',
+                    'con artist claiming to be a ghost',
+                    'hobby wizard who just wants to help people',
                 ]
             }
         };
@@ -1328,14 +1341,20 @@
                     'I cultivate intrigue even when there is none',
                     'I have a past I can\'t talk about',
                     'no one can know what I did',
-                    'some times the memory of a past life comes back'
+                    'some times the memory of a past life comes back',
+                    'I have a strange ability',
                 ],
                 Dramatically: [
                     'everything is a story',
                     'I make moments memorable',
                     'I have a flair for the theatrical',
                     'I play to my audience',
-                    'emotions drive me'
+                    'emotions drive me',
+                    'I\'m a diva',
+                    'the world is my stage',
+                    'I can be anyone I want to be',
+                    'I\'m good at hiding behind a mask',
+
                 ],
                 Carefully: [
                     'I plan everything',
@@ -1346,7 +1365,9 @@
                     'I\'m afraid of my own shadow',
                     'I\'m paralyzed by indecision',
                     'I made a mistake once that haunts me',
-                    'I can\'t afford another failure'
+                    'I can\'t afford another failure',
+                    'I\'m a perfectionist',
+                    'I\'m a control freak',
                 ],
                 Cowardly: [
                     'I avoid confrontation',
@@ -1355,7 +1376,8 @@
                     'fear keeps me alive',
                     'I\'m not brave, just practical',
                     'I saw what happens to heroes',
-                    'I lost everyone who was brave'
+                    'I lost everyone who was brave',
+                    'I\'m not brave, just practical',
                 ],
                 Diplomatically: [
                     'I smooth over conflicts',
@@ -1364,7 +1386,8 @@
                     'I try to find common ground even when there is none',
                     'everything is open to negotiaton',
                     'I\'m a people-pleaser',
-                    'one time I said the wrong thing and it cost me dearly'
+                    'one time I said the wrong thing and it cost me dearly',
+                    'I want to avoid conflict at all costs',
                 ],
                 Charmingly: [
                     'people naturally like me',
@@ -1375,7 +1398,8 @@
                     'I manipulate with smiles',
                     'it\'s all an act',
                     'if people saw the real me, they\'d run',
-                    'it\'s how I survived my past'
+                    'it\'s how I survived in the past',
+                    'I must hide my true nature',
                 ],
                 Bluntly: [
                     'I say what I think',
@@ -1385,10 +1409,10 @@
                     'there is no time for games',
                     'I\'m rude',
                     'I don\'t care about feelings',
-                    'because people have hurt me before',
+                    'people have hurt me before',
                     'I push people away before they can hurt me',
                     'I have no filter',
-                    'because I\'m angry all the time'
+                    'I\'m angry all the time',
                 ],
                 Comically: [
                     'humor is my defense',
@@ -1397,6 +1421,9 @@
                     'a joke defuses tension',
                     'I clown around',
                     'it\'s how I cope with things',
+                    'I\'m a clown by nature',
+                    'if I don\'t laugh, I\'ll cry',
+
                 ],
                 Persuasively: [
                     'I convince people',
@@ -1404,7 +1431,9 @@
                     'I sell my vision',
                     'I know what people want to hear',
                     'I\'m naturally convincing',
-                    'I have an agenda, and I push it'
+                    'I have an agenda, and I push it',
+                    'I\'m a master of persuasion',
+                    'if I talk fast enough, people will not have time to think.'
                 ],
                 Confidently: [
                     'I trust myself',
@@ -1414,6 +1443,9 @@
                     'certainty inspires others',
                     'I fake it till I make it',
                     'I\'m hiding my insecurities',
+                    'I hide my insecurities behind a confident facade',
+                    'I\'m convinced that I\'m better than everyone else',
+                    'confidence beats competence every time',
                 ],
                 Romantically: [
                     'I lead with my heart',
@@ -1522,6 +1554,9 @@
                     'danger doesn\'t scare me',
                     'fate will decide',
                     'when honor calls, I answer without thought',
+                    'I was never good at thinking things through',
+                    'I\'m a risk-taker',
+                    'consequences are for others',
                 ],
                 Slowly: [
                     'I move with deliberate purpose',
@@ -1529,8 +1564,11 @@
                     'I am patient as stone',
                     'I am a wise old soul that has seen the world',
                     'I\'m old and brittle',
-                    'my body is made of stone', 
+                    'my body is made of stone',
                     'I am a walking tank',
+                    'I\'m slow and steady',
+                    'I\'m a slow thinker',
+                    'I\'m a slow learner',
                 ],
                 Luckily: [
                     'the gods favor me',
@@ -1538,8 +1576,12 @@
                     'I was blessed at birth',
                     'destiny protects me',
                     'luck is the only thing I ever got',
-                    'I\'m a professional gambler', 
+                    'I\'m a professional gambler',
                     'I make my own luck',
+                    'I have my lucky charm with me',
+                    'being lucky is the only thing I\'m good at',
+                    'I\'m convinced I was born under a lucky star',
+                    'they say I\'m a lucky charm to others',
                 ],
                 Cleverly: [
                     'I studied at the academy',
@@ -1550,6 +1592,10 @@
                     'I deceive and scheme',
                     'I think myself superior to all',
                     'it allows me to hide my weaknesses',
+                    'I\'m a genius',
+                    'I\'m highly educated',
+                    'I\'m a master of my field',
+                    'because I\'m physically weak',
                 ],
                 Perceptively: [
                     'I have the sight',
@@ -1557,7 +1603,12 @@
                     'my awareness is supernatural',
                     'I read omens',
                     'nothing escapes my notice',
-                    'I once avoided a deadly trap',
+                    'I spot dangers before they happen',
+                    'I see patterns where others see chaos',
+                    'I\'m a master of observation',
+                    'I have trained myself to see the world in a different way',
+                    'I see small details that others miss',
+                    'I tend to overthink even the smallest thing',
                 ],
                 Mysteriously: [
                     'I keep my secrets close',
@@ -1567,18 +1618,24 @@
                     'I speak in riddles',
                     'I bear a curse I cannot speak of',
                     'my true identity must remain hidden',
-                    'I am hunted for what I was',
-                    'I am hunted for what I am'
+                    'I am hunted for what I once was',
+                    'I am hunted for what I am',
+                    'I cannot escape my past',
+                    'I cannot escape my destiny',
+                    'I cannot escape my curse',
+                    'I have a strange ability',
                 ],
                 Dramatically: [
                     'I live for the epic moment',
                     'legends are made of drama',
                     'I channel divine passion',
                     'every act is mythic',
-                    'fate itself watches me'
+                    'fate itself watches me',
+                    'I\'m a known actor and perforer',
+                    'the world is my stage',
                 ],
                 Carefully: [
-                    'I learned wizard\'s precision',
+                    'I learned precision and care from a master',
                     'I plan like a master tactician',
                     'caution kept me alive',
                     'I prepare for everything',
@@ -1641,7 +1698,9 @@
                     'I never show fear',
                     'certainty is my armor',
                     'I lead naturally',
-                    'presence commands respect'
+                    'presence commands respect',
+                    'I must hide my insecurities',
+                    'no one must know my true background',
                 ],
                 Romantically: [
                     'I follow my heart above all',
@@ -1708,35 +1767,45 @@
                     'I calculate every move',
                     'time means nothing to me',
                     'I wait for the perfect shot',
-                    'patience is tactical'
+                    'patience is tactical',
+                    'I took a class.'
                 ],
                 Flamboyantly: [
                     'I make an entrance',
                     'style is substance',
                     'I\'m a celebrity',
                     'my reputation precedes me',
-                    'I live large'
+                    'I live large',
+                    'I\'m a show-off',
+                    'I took an online class',
                 ],
                 Recklessly: [
                     'I take crazy risks',
                     'I trust my luck',
                     'fear is for grounders',
                     'I fly by instinct',
-                    'calculated chaos'
+                    'calculated chaos',
+                    'my relatives always bailed me out',
+                    'I never had to pay for my mistakes',
+                    'consequences are for others',
                 ],
                 Slowly: [
                     'I process everything methodically',
                     'systems require careful operation',
                     'I never rush procedures',
                     'deliberate action prevents accidents',
-                    'I analyze before I act'
+                    'I analyze before I act',
+                    'I take my time, but normally make it right',
+                    'I am built like a tank',
                 ],
                 Luckily: [
                     'probability favors me',
                     'I beat the odds',
                     'I always roll sixes',
                     'my luck is legendary',
-                    'chance is on my side'
+                    'chance is on my side',
+                    'I\'m a professional gambler',
+                    'I make my own luck',
                 ],
                 Cleverly: [
                     'my neural implants help me think',
@@ -1752,7 +1821,9 @@
                     'I have enhanced awareness',
                     'I read micro-expressions',
                     'I scan constantly',
-                    'my perception is augmented'
+                    'my perception is augmented',
+                    'I have a strange ability',
+                    'I see things that others don\'t',
                 ],
                 Mysteriously: [
                     'I keep my past secret',
@@ -1769,7 +1840,9 @@
                     'everything\'s a production',
                     'I channel the dramatic',
                     'I make moments cinematic',
-                    'style over substance'
+                    'I favor style over substance',
+                    'I\'m a show-off',
+                    'I took an online class',
                 ],
                 Carefully: [
                     'I triple-check everything',
@@ -2121,7 +2194,7 @@
                     but I can feel it catching up to me. I have a lot of vices, and my reputation is the 
                     only thing preventing me from falling far and deep.`
                 ],
-                dark: [ `Hardship marked me deeply in my early years. For a while, violence shaped everything 
+                dark: [`Hardship marked me deeply in my early years. For a while, violence shaped everything 
                     I knew. To survive, I betrayed one who trusted me. I'm always looking over my shoulder,
                     convinced they are still hunting me to this day. I have haunted eyes and dress to blend in.`,
                     `I survived dark times. Addiction nearly destroyed me, and the things I've seen changed 
@@ -2240,7 +2313,7 @@
                     follows me everywhere. I carry the weight of corruption and live with the darkness
                     inside me. My eyes hold terrible knowledge.`,
                     `I came from a place of loss and corruption, learning early that power has a price. I
-                    murdered someone important and betrayed my order. The price is still being paid, and
+                    murdered someone important and betrayed my kin. I still pay the price and 
                     redemption seems impossible. I bear visible marks of corruption.`,
                     `I experienced terrible betrayal and witnessed forbidden things. A curse transforms me
                     slowly, and necromancy tempts me daily. I walk a path shadowed by my choices, seeking
@@ -2255,10 +2328,9 @@
                     order, and everyone I love dies. I walk seeking vengeance. A troubled aura surrounds
                     me.`,
                     `I suffered a great loss and broke an oath. A demon claimed part of my soul, and I
-                    carry curses. Redemption seems impossible. I bear visible marks of corruption.`,
+                    had to accept a curse to escape - temporarily. Redemption seems impossible.`,
                     `My past is shadowed by curses and terrible deeds. I'm bound by a pact I regret, and
-                    the darkness calls to me. I walk a path shadowed by my choices. Strange symbols mark
-                    my clothing.`,
+                    the darkness calls to me. I walk a path shadowed by my choices.`,
                     `I learned that power has a price and made terrible choices. I murdered someone and
                     betrayed those who trusted me. The price is still being paid. My eyes hold terrible
                     knowledge.`,
@@ -2287,11 +2359,11 @@
                     arranged marriage and keep getting into trouble. I make friends wherever I go and
                     embrace the magical. I favor whimsical accessories.`,
                     `I grew up believing in destiny and always dreamed of adventure. I finally answered
-                    destiny's call, though I'm naive and learning. I live like in the stories. I dress in
+                    destiny's call, though I'm naive and learning. I live like in the stories and dress in
                     bright colors.`,
                     `I was raised on tales of heroes and had a gift for finding joy. My magic goes wrong
                     often, but I found I had a special gift. I spread joy on my journey. I carry odd
-                    trinkets.`,
+                    trinkets with me.`,
                     `I came from a family of dreamers and never fit into ordinary life. I owe money to
                     half the kingdom but took the leap into adventure. Every day brings new wonders. My
                     equipment is quirky.`,
@@ -2317,7 +2389,7 @@
                     spacer gear.`,
                     `I logged many hours in space and came up through the ranks. I'm behind on maintenance
                     fees, and station bureaucracy makes work impossible. Experience has made me capable,
-                    and years of work show in my expertise.`, 
+                    and years of work show in my expertise.`,
                     `I learned my trade in the black and built my career one job at a time. My
                     certification is about to expire, and union disputes affect my pay. I deal with the
                     realities of space travel with professionalism. I keep my equipment well-maintained.`,
@@ -2325,7 +2397,7 @@
                     accident from unemployment, and insurance companies don't trust me anymore. Still, 
                     I have a reputation in the right circles to fall back on.`,
                     `I have a lot of expectations on my shoulders. I my first corporate certification 
-                    at an elite school. Problem is that I'm not good at this, and want another life.`, 
+                    at an elite school. Problem is that I'm not good at this, and want another life.`,
                     `I pursued this career deliberately and proved myself. The pay is decent,
                     and work is steady, though challenges I face could be deadly.`,
                     `I grew up planet-side and built my career one job at a time. Corporate cutbacks
@@ -2342,7 +2414,9 @@
                     `Ever since I was a kid, I always wanted to entertain people. I ended up travelling
                     far and wide to do so. I'm not very good at managing my finances, though, and now I owe
                     a lot of money to some very dangerous people.`,
-                ], dark: [ `I grew up where violence was survival and learned early that morality is a luxury. I
+                ],
+                dark: [
+                    `I grew up where violence was survival and learned early that morality is a luxury. I
                     left my crew to die, and now corporate kill squads hunt me. Visible cybernetics mark me.`,
                     `I came from the kind of place no one escapes without making dark choices. My
                     augmentations are killing me slowly, and I wonder if any of the others got out 
@@ -2461,12 +2535,12 @@
                     `I was drawn to mysteries others feared. Equipment breaks around me, but I decided to
                     face horror with humor. I maintain optimism despite darkness. I favor practical but
                     unique clothing.`,
-                    `I saw my first ghost and got hooked. Spirits avoid me, but I finally got the chance
-                    to prove it. I approach horror with unexpected cheer. I have a disarmingly friendly
-                    look.`,
+                    `I saw my first ghost as a kid and found it amazing. Spirits avoid me because I'm too friendly 
+                    and weird. I just want to prove they exist! I approach horror with unexpected cheer and
+                     have a disarmingly friendly look.`,
                     `I had an unusual gift from birth. My enthusiasm scares away phenomena, but I fell
                     into this life through absurd coincidences. I treat every encounter as exciting. I
-                    dress practically with flair.`
+                    dress practically ... but with obvious flair.`
                 ]
             }
         };
@@ -2790,8 +2864,8 @@
                     <h2>Approaches <span class="format-hint">&lt;approach&gt;, because &lt;reason&gt;</span></h2>
                     <ul class="approaches-list">
                         ${character.approaches.map((approach, i) => {
-                            return `<li class="approach-item" data-approach-index="${i}"><span class="approach-text" onclick="startEdit('approaches', ${i})">${renderApproach(approach)}</span><button class="edit-icon" onclick="startEdit('approaches', ${i})" title="Edit approach">&#9998;</button></li>`;
-                        }).join('')}
+                return `<li class="approach-item" data-approach-index="${i}"><span class="approach-text" onclick="startEdit('approaches', ${i})">${renderApproach(approach)}</span><button class="edit-icon" onclick="startEdit('approaches', ${i})" title="Edit approach">&#9998;</button></li>`;
+            }).join('')}
                         ${emptyApproachSlots}
                     </ul>
                 </div>
@@ -2822,7 +2896,7 @@
         function exportCanvasOptions() {
             return {
                 scale: 2,
-                onclone: function(clonedDoc) {
+                onclone: function (clonedDoc) {
                     var container = clonedDoc.getElementById('characterSheet').parentElement;
                     container.style.maxWidth = 'none';
                     container.style.width = '850px';
@@ -2846,8 +2920,10 @@
             document.body.style.padding = '0';
             element.classList.add('export-mode');
             window.scrollTo(0, 0);
-            return { header: header, controls: controls, element: element,
-                     savedScrollY: savedScrollY, savedBodyPadding: savedBodyPadding };
+            return {
+                header: header, controls: controls, element: element,
+                savedScrollY: savedScrollY, savedBodyPadding: savedBodyPadding
+            };
         }
 
         function cleanupAfterExport(refs) {
@@ -2871,13 +2947,13 @@
 
             // Generate PDF as blob and open in new window for printing
             html2pdf().set(opt).from(element).toCanvas()
-                .then(function() { cleanupAfterExport(refs); })
+                .then(function () { cleanupAfterExport(refs); })
                 .toPdf().outputPdf('blob')
-                .then(function(blob) {
+                .then(function (blob) {
                     var url = URL.createObjectURL(blob);
                     var printWindow = window.open(url, '_blank');
                     if (printWindow) {
-                        printWindow.onload = function() {
+                        printWindow.onload = function () {
                             printWindow.print();
                         };
                     }
@@ -2902,16 +2978,16 @@
             };
 
             html2pdf().set(opt).from(element).toCanvas()
-                .then(function() { cleanupAfterExport(refs); })
+                .then(function () { cleanupAfterExport(refs); })
                 .toPdf().save();
         }
 
         // Apply export-mode for browser Ctrl+P printing
-        window.addEventListener('beforeprint', function() {
+        window.addEventListener('beforeprint', function () {
             var sheet = document.getElementById('characterSheet');
             if (sheet) sheet.classList.add('export-mode');
         });
-        window.addEventListener('afterprint', function() {
+        window.addEventListener('afterprint', function () {
             var sheet = document.getElementById('characterSheet');
             if (sheet) sheet.classList.remove('export-mode');
         });
@@ -2923,4 +2999,5 @@
         });
     </script>
 </body>
+
 </html>
