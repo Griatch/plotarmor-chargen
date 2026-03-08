@@ -5,7 +5,7 @@
 You can find this generator [deployed online here][generator]!
 
 This repository contains a full random character generation system for
-the [Plot Armor][plotarmor] roleplaying game.
+the [Plot Armor][plotarmor] roleplaying game (v1.0).
 
 If you find bugs, or have good ideas on random backgrounds/blurbs strings,
 [make an issue][newissue] or PR -  I'll review and add them!
