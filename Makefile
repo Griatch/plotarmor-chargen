@@ -1,4 +1,12 @@
-.PHONY: test install clean
+.PHONY: help test install clean
+
+# Show available targets
+help:
+	@echo "Usage: make <target>"
+	@echo ""
+	@echo "  install   Install test dependencies (jsdom)"
+	@echo "  test      Run the test suite"
+	@echo "  clean     Remove node_modules and package-lock.json"
 
 # Install test dependencies
 install:
