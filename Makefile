@@ -6,7 +6,7 @@ help:
 	@echo ""
 	@echo "  install   Install test dependencies (jsdom)"
 	@echo "  test      Run the test suite"
-	@echo "  clean     Remove node_modules and package-lock.json"
+	@echo "  clean     Remove node_modules"
 
 # Install test dependencies
 install:
@@ -16,6 +16,6 @@ install:
 test:
 	npx --yes node --test tests/test_chargen.mjs
 
-# Remove node_modules and package-lock.json
+# Remove node_modules
 clean:
-	rm -rf node_modules package-lock.json
+	rm -rf node_modules
