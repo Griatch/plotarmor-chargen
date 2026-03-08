@@ -1,3 +1,5 @@
+[![Tests](https://github.com/Griatch/plotarmor-chargen/actions/workflows/test.yml/badge.svg)](https://github.com/Griatch/plotarmor-chargen/actions/workflows/test.yml)
+
 ![Screenshot of the character generator](images/screenshot.jpg)
 
 This repository contains a full character generation system for
